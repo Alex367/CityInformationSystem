@@ -1,0 +1,24 @@
+<section class="section section_login">
+  <h1>Login</h1>
+  <form class="form form_login" (ngSubmit)="authenticate()" #loginForm="ngForm">
+    <label for="username">username: </label>
+    <input
+      type="text"
+      id="username"
+      name="username"
+      [(ngModel)]="username"
+      required
+    />
+    <br />
+    <label for="password">password: </label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      [(ngModel)]="password"
+      required
+    />
+    <br />
+    <input type="submit" value="Login!" />
+  </form>
+</section>

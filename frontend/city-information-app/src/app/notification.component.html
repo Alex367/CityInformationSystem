@@ -1,0 +1,7 @@
+<div class="notification-container">
+  @for (note of notificationService.notifications(); track $index) {
+  <div class="notification {{ note.type }}">
+    {{ note.message }}
+  </div>
+  }
+</div>

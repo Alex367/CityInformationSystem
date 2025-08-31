@@ -1,0 +1,69 @@
+<header class="navigation">
+  <div routerLink="/">Logo</div>
+  <nav>
+    <ul class="navigation_items">
+      @if (!authService.isLoggedIn) {
+      <li>
+        <a
+          routerLink="/login"
+          routerLinkActive="activebutton"
+          ariaCurrentWhenActive="page"
+          >Login</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/registration"
+          routerLinkActive="activebutton"
+          ariaCurrentWhenActive="page"
+        >
+          Registration
+        </a>
+      </li>
+      } @else { @if (authService.isAdmin()) {
+      <li>
+        <a
+          routerLink="/userList"
+          routerLinkActive="activebutton"
+          ariaCurrentWhenActive="page"
+          >UserList</a
+        >
+      </li>
+      }
+
+      <li>
+        <a
+          routerLink="/welcome"
+          routerLinkActive="activebutton"
+          ariaCurrentWhenActive="page"
+        >
+          Welcome
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/city"
+          routerLinkActive="activebutton"
+          ariaCurrentWhenActive="page"
+        >
+          City
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/cityList"
+          routerLinkActive="activebutton"
+          ariaCurrentWhenActive="page"
+        >
+          City list
+        </a>
+      </li>
+
+      <li>
+        <button (click)="logoutHandler()">Logout</button>
+      </li>
+
+      }
+    </ul>
+  </nav>
+</header>

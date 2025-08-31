@@ -1,0 +1,30 @@
+<div class="section section_cityList">
+  @if(isFetching() && !error()){
+  <p class="fallback-text">Fetching...</p>
+  } @if (error()) {
+  <p class="fallback-text">{{ error() }}</p>
+  } @if (cityData()) { @for (cityItem of cityData(); track cityItem.id){
+  <ul>
+    <li>
+      <p>{{ cityItem.city }} - {{ cityItem.description }}</p>
+      <div>
+        <img
+          [src]="cityItem.path_file"
+          [alt]="cityItem.path_file"
+          style="width: 300px; height: auto"
+        />
+      </div>
+      <div class="cityList_btn">
+        <button (click)="deleteHandler(cityItem.id)">Delete</button>
+        <button
+          (click)="
+            editHandler(cityItem)
+          "
+        >
+          Edit
+        </button>
+      </div>
+    </li>
+  </ul>
+  } }
+</div>

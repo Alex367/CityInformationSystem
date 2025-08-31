@@ -1,0 +1,22 @@
+.navigation{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.navigation_items{
+    list-style-type: none;
+    display: flex;
+    gap: 1.2rem;
+}
+.navigation_items li a{
+    text-decoration: none;
+    color: var(--nav_color);
+}
+
+.activebutton {
+    box-shadow: inset 0 1px 0 0 #dcecfb;
+    background: #bddbfa linear-gradient(to bottom, #bddbfa 5%, #80b5ea 100%);
+    border: 1px solid #84bbf3;
+    color: #ffffff;
+    text-shadow: 0 1px 0 #528ecc;
+}

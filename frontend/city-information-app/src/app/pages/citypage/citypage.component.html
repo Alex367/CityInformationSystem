@@ -1,0 +1,36 @@
+<section class="section section_city">
+  <h1>Add City</h1>
+  <form class="form form_city" (ngSubmit)="onSubmit()">
+    <label for="city">City name: </label>
+    <input
+      type="text"
+      id="city"
+      name="city"
+      [(ngModel)]="enteredCity"
+      required
+    />
+    <br />
+    <label for="avatar">Upload image: </label>
+    <input
+      type="file"
+      id="avatar"
+      name="avatar"
+      [(ngModel)]="enteredFile"
+      required
+    />
+    <br />
+    <label for="description">Description: </label>
+    <textarea
+      name="description"
+      id="description"
+      [(ngModel)]="enteredCountry"
+      required
+    >
+    </textarea>
+    <br />
+    <input
+      type="submit"
+      [value]="isFilledParams() ? 'Patch the city' : 'Add new city'"
+    />
+  </form>
+</section>
