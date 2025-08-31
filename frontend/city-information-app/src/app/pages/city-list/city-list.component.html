@@ -3,7 +3,7 @@
   <p class="fallback-text">Fetching...</p>
   } @if (error()) {
   <p class="fallback-text">{{ error() }}</p>
-  } @if (cityData()) { @for (cityItem of cityData(); track cityItem.id){
+  } @if (cityData()) { @for (cityItem of cityData(); track $index){
   <ul>
     <li>
       <p>{{ cityItem.city }} - {{ cityItem.description }}</p>
@@ -15,7 +15,7 @@
         />
       </div>
       <div class="cityList_btn">
-        <button (click)="deleteHandler(cityItem.id)">Delete</button>
+        <button (click)="deleteHandler(cityItem.city)">Delete</button>
         <button
           (click)="
             editHandler(cityItem)

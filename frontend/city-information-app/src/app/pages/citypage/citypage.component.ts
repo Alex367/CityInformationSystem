@@ -77,7 +77,6 @@ export class CityPageComponent {
         .patch(
           'http://localhost:8080/api/city',
           {
-            id: this.receivedId,
             city: this.enteredCity,
             path_file: this.enteredFile,
             description: this.enteredCountry,

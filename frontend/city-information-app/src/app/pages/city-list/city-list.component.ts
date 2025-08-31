@@ -21,38 +21,6 @@ export class CityListComponent implements OnInit {
 
   constructor(private router: Router) {}
 
-  deleteHandler(cityId: string) {
-    const sub = this.httpClient
-      .delete<{ city: string }>(
-        `http://localhost:8080/api/cityList/${cityId}`,
-        {
-          withCredentials: true,
-        }
-      )
-      .subscribe({
-        next: (resData) => {
-          console.log(resData);
-          this.cityData.update(
-            (cities) => cities?.filter((c) => c.id !== cityId) ?? []
-          );
-          this.notificationService.show(
-            'success',
-            `${resData.city} was deleted!`
-          );
-        },
-      });
-  }
-
-  editHandler(cityItem: City) {
-    this.router.navigate(['/city'], {
-      queryParams: {
-        id: cityItem.id,
-        city: cityItem.city,
-        description: cityItem.description,
-      },
-    });
-  }
-
   ngOnInit() {
     this.isFetching.set(true);
     const subscription = this.httpClient
@@ -82,6 +50,37 @@ export class CityListComponent implements OnInit {
 
     this.destroyRef.onDestroy(() => {
       subscription.unsubscribe();
+    });
+  }
+
+  deleteHandler(cityId: string) {
+    const sub = this.httpClient
+      .delete<{ city: string }>(
+        `http://localhost:8080/api/cityList/${cityId}`,
+        {
+          withCredentials: true,
+        }
+      )
+      .subscribe({
+        next: (resData) => {
+          console.log(resData);
+          this.cityData.update((cities) =>
+            cities ? cities.filter((c) => c.city !== cityId) : []
+          );
+          this.notificationService.show(
+            'success',
+            `${resData.city} was deleted!`
+          );
+        },
+      });
+  }
+
+  editHandler(cityItem: City) {
+    this.router.navigate(['/city'], {
+      queryParams: {
+        city: cityItem.city,
+        description: cityItem.description,
+      },
     });
   }
 }

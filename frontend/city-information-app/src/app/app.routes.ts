@@ -7,7 +7,7 @@ import { WelcomepageComponent } from './pages/welcomepage/welcomepage.component'
 import { CityPageComponent } from './pages/citypage/citypage.component';
 import { CityListComponent } from './pages/city-list/city-list.component';
 import { AuthGuard } from './auth.guard';
-import { UserListComponent } from './user-list/user-list.component';
+import { UserListComponent } from './pages/user-list/user-list.component';
 
 export const routes: Routes = [
   { path: '', component: MainpageComponent },

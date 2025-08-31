@@ -63,6 +63,10 @@
         <button (click)="logoutHandler()">Logout</button>
       </li>
 
+      <li>
+        <strong>Logged as: {{ authService.loggedName() }}</strong>
+      </li>
+
       }
     </ul>
   </nav>
