@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../notification.service';
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-citypage',
@@ -20,6 +21,7 @@ export class CityPageComponent {
   private destroyRef = inject(DestroyRef);
   notificationService = inject(NotificationService);
   isFilledParams = signal(false);
+  authService = inject(AuthService);
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
@@ -52,6 +54,8 @@ export class CityPageComponent {
       return;
     }
 
+    console.log(this.authService.loggedName());
+
     if (!this.isFilledParams()) {
       this.httpClient
         .post(
@@ -77,6 +81,7 @@ export class CityPageComponent {
         .patch(
           'http://localhost:8080/api/city',
           {
+            id: this.receivedId,
             city: this.enteredCity,
             path_file: this.enteredFile,
             description: this.enteredCountry,

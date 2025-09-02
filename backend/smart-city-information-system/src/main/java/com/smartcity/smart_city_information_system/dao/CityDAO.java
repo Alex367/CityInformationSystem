@@ -12,4 +12,6 @@ public interface CityDAO {
     String deleteCity(String id);
 
     City findById(String id);
+
+    List<City> findAllByUserId(String userId);
 }

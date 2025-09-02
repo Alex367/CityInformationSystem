@@ -3,15 +3,22 @@ package com.smartcity.smart_city_information_system.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "new_city")
+@Table(name = "city")
 public class City {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
     @Column(name = "city")
     private String city;
     @Column(name = "path_file")
     private String path_file;
     @Column(name = "description")
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Members members;
 
     public City() {
     }
@@ -20,6 +27,14 @@ public class City {
         this.city = city;
         this.path_file = path_file;
         this.description = description;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getCity() {
@@ -38,6 +53,14 @@ public class City {
         this.path_file = path_file;
     }
 
+    public Members getMembers() {
+        return members;
+    }
+
+    public void setMembers(Members members) {
+        this.members = members;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -49,6 +72,7 @@ public class City {
     @Override
     public String toString() {
         return "City{" +
+                "id=" + id +
                 ", city='" + city + '\'' +
                 ", path_file='" + path_file + '\'' +
                 ", description='" + description + '\'' +

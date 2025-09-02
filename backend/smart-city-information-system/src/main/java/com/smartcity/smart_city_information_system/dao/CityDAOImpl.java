@@ -21,7 +21,10 @@ public class CityDAOImpl implements CityDAO{
     @Override
     public List<City> findAllCity() {
 
-        TypedQuery<City> theQuery = entityManager.createQuery("from City", City.class);
+        TypedQuery<City> theQuery = entityManager.createQuery(
+                "from City", City.class
+        );
+
         return theQuery.getResultList();
     }
 
@@ -42,4 +45,12 @@ public class CityDAOImpl implements CityDAO{
     public City findById(String id) {
         return entityManager.find(City.class, id);
     }
+
+    @Override
+    public List<City> findAllByUserId(String userId) {
+        return entityManager.createQuery(
+                "select c from City c where c.members.user_id = :userId", City.class
+        ).setParameter("userId", userId).getResultList();
+    }
+
 }

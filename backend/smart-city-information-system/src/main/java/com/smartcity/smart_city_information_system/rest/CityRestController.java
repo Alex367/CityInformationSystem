@@ -1,12 +1,11 @@
 package com.smartcity.smart_city_information_system.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.smartcity.smart_city_information_system.dto.DeleteCityResponse;
-import com.smartcity.smart_city_information_system.dto.RegistrationRequest;
-import com.smartcity.smart_city_information_system.dto.RegistrationResponse;
+import com.smartcity.smart_city_information_system.dto.*;
 import com.smartcity.smart_city_information_system.entity.City;
+import com.smartcity.smart_city_information_system.entity.Members;
 import com.smartcity.smart_city_information_system.service.CityService;
+import com.smartcity.smart_city_information_system.service.MembersService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +25,7 @@ import java.util.Map;
 public class CityRestController {
 
     private CityService cityService;
+    private MembersService membersService;
     private ObjectMapper objectMapper;
     private final JdbcUserDetailsManager userDetailsManager;
     private PasswordEncoder passwordEncoder;
@@ -34,16 +34,22 @@ public class CityRestController {
     public CityRestController(CityService cityService,
                               ObjectMapper theObjectMapper,
                               JdbcUserDetailsManager userDetailsManager,
-                              PasswordEncoder passwordEncoder) {
+                              PasswordEncoder passwordEncoder,
+                              MembersService membersService) {
         this.cityService = cityService;
         objectMapper = theObjectMapper;
         this.userDetailsManager = userDetailsManager;
         this.passwordEncoder = passwordEncoder;
+        this.membersService = membersService;
     }
 
     @GetMapping("/cityList")
-    public Map<String, List<City>> getCity(){
-        return Map.of("cities", cityService.findAll());
+    public Map<String, List<CityListDTO>> getCity(Authentication auth){
+        String currentUsername = auth.getName();
+        List<CityListDTO> dtos = cityService.findAllByUserId(currentUsername).stream()
+            .map(CityListDTO::from)
+            .toList();
+        return Map.of("cities", dtos);
     }
 
     @DeleteMapping("/cityList/{cityId}")
@@ -53,30 +59,18 @@ public class CityRestController {
     }
 
     @PostMapping("/city")
-    public Map<String, String> createCity(@RequestBody City theCity){
-        System.out.println(theCity.toString());
-        theCity.setPath_file("test.jpg");
-        cityService.addNew(theCity);
-        return Map.of("createdCity", theCity.getCity());
+    public ResponseEntity<PostCityResponse> createCity(@RequestBody PostCityRequest dto, Authentication auth){
+        City city = new City(dto.getCity(), "test.jpg", dto.getDescription());
+        Members member = membersService.findById(auth.getName());
+        city.setMembers(member);
+        cityService.addNew(city);
+        return ResponseEntity.ok(new PostCityResponse(city.getCity()));
     }
 
     @PatchMapping("/city")
-    public Map<String, String> updateCity(@RequestBody Map<String, String> payload){
-        System.out.println(payload.toString());
-        City tempCity = cityService.findById(payload.get("city"));
-        String changedCity = tempCity.getCity();
-
-        ObjectNode convertedTempCity = objectMapper.convertValue(tempCity, ObjectNode.class);
-        ObjectNode convertedPayload = objectMapper.convertValue(payload, ObjectNode.class);
-
-        convertedTempCity.setAll(convertedPayload);
-
-        City patchedCity = objectMapper.convertValue(convertedTempCity, City.class);
-        patchedCity.setPath_file("test.jpg");
-        cityService.addNew(patchedCity);
-
-        return Map.of("patchedCity", changedCity);
-
+    public ResponseEntity<PatchCityResponse> updateCity(@RequestBody PatchCityRequest dto){
+        City patchedCity = cityService.patchCity(dto);
+        return ResponseEntity.ok(new PatchCityResponse(patchedCity.getCity()));
     }
 
     @GetMapping("/user-info")

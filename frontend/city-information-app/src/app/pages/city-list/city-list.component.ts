@@ -54,6 +54,7 @@ export class CityListComponent implements OnInit {
   }
 
   deleteHandler(cityId: string) {
+    console.log("ccc " + cityId);
     const sub = this.httpClient
       .delete<{ city: string }>(
         `http://localhost:8080/api/cityList/${cityId}`,
@@ -64,8 +65,8 @@ export class CityListComponent implements OnInit {
       .subscribe({
         next: (resData) => {
           console.log(resData);
-          this.cityData.update((cities) =>
-            cities ? cities.filter((c) => c.city !== cityId) : []
+          this.cityData.update(
+            (cities) => cities?.filter((c) => c.id !== cityId) ?? []
           );
           this.notificationService.show(
             'success',
@@ -78,6 +79,7 @@ export class CityListComponent implements OnInit {
   editHandler(cityItem: City) {
     this.router.navigate(['/city'], {
       queryParams: {
+        id: cityItem.id,
         city: cityItem.city,
         description: cityItem.description,
       },
