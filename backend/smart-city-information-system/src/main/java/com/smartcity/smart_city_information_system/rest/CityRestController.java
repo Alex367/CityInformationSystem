@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartcity.smart_city_information_system.dto.*;
 import com.smartcity.smart_city_information_system.entity.City;
 import com.smartcity.smart_city_information_system.entity.Members;
+import com.smartcity.smart_city_information_system.entity.Roles;
 import com.smartcity.smart_city_information_system.service.CityService;
 import com.smartcity.smart_city_information_system.service.MembersService;
+import com.smartcity.smart_city_information_system.service.RolesService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,18 +31,21 @@ public class CityRestController {
     private ObjectMapper objectMapper;
     private final JdbcUserDetailsManager userDetailsManager;
     private PasswordEncoder passwordEncoder;
+    private RolesService rolesService;
 
     @Autowired
     public CityRestController(CityService cityService,
                               ObjectMapper theObjectMapper,
                               JdbcUserDetailsManager userDetailsManager,
                               PasswordEncoder passwordEncoder,
-                              MembersService membersService) {
+                              MembersService membersService,
+                              RolesService rolesService) {
         this.cityService = cityService;
         objectMapper = theObjectMapper;
         this.userDetailsManager = userDetailsManager;
         this.passwordEncoder = passwordEncoder;
         this.membersService = membersService;
+        this.rolesService = rolesService;
     }
 
     @GetMapping("/cityList")
@@ -107,4 +112,17 @@ public class CityRestController {
         return ResponseEntity.ok(new RegistrationResponse("User registered successfully!!!", req.getUser_id()));
 
     }
+
+    @GetMapping("/userList")
+    public Map<String, List<UserListResponse>> getUsers(Authentication auth){
+        List<UserListResponse> allUsers = rolesService.findAllUsers(auth.getName()).stream().map(UserListResponse::from).toList();
+        return Map.of("users", allUsers);
+    }
+
+    @DeleteMapping("/userList/{userId}")
+    public ResponseEntity<DeleteUserResponse> deleteUsers(@PathVariable String userId){
+        String removedUser = rolesService.deleteUser(userId);
+        return ResponseEntity.ok(new DeleteUserResponse(removedUser));
+    }
+
 }

@@ -22,6 +22,9 @@ public class Members {
     @OneToMany(mappedBy = "members")
     private List<City> cities;
 
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    private Roles role;
+
     public Members() {
     }
 
@@ -29,6 +32,14 @@ public class Members {
         this.pw = pw;
         this.active = active;
         this.user_id = user_id;
+    }
+
+    public Roles getRole() {
+        return role;
+    }
+
+    public void setRole(Roles role) {
+        this.role = role;
     }
 
     public String getUser_id() {
@@ -72,4 +83,14 @@ public class Members {
         tempCity.setMembers(this);
     }
 
+    @Override
+    public String toString() {
+        return "Members{" +
+                "user_id='" + user_id + '\'' +
+                ", pw='" + pw + '\'' +
+                ", active='" + active + '\'' +
+                ", cities=" + cities +
+                ", role=" + role +
+                '}';
+    }
 }

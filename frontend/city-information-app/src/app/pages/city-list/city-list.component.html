@@ -1,9 +1,12 @@
 <div class="section section_cityList">
+  <h1>All your cities</h1>
   @if(isFetching() && !error()){
-  <p class="fallback-text">Fetching...</p>
+  <p class="fallback-text">Fetching... ⏳</p>
   } @if (error()) {
   <p class="fallback-text">{{ error() }}</p>
-  } @if (cityData()) { @for (cityItem of cityData(); track $index){
+  } @if (cityData()) { @if (cityData()?.length === 0) {
+  <p>No cities created yet... 🥲</p>
+  } @else { @for (cityItem of cityData(); track $index){
   <ul>
     <li>
       <p>{{ cityItem.city }} - {{ cityItem.description }}</p>
@@ -16,15 +19,9 @@
       </div>
       <div class="cityList_btn">
         <button (click)="deleteHandler(cityItem.id)">Delete</button>
-        <button
-          (click)="
-            editHandler(cityItem)
-          "
-        >
-          Edit
-        </button>
+        <button (click)="editHandler(cityItem)">Edit</button>
       </div>
     </li>
   </ul>
-  } }
+  } } }
 </div>
