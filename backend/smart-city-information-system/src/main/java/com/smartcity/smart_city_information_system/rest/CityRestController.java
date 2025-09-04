@@ -65,6 +65,19 @@ public class CityRestController {
 
     @PostMapping("/city")
     public ResponseEntity<PostCityResponse> createCity(@RequestBody PostCityRequest dto, Authentication auth){
+
+        if(dto.getCity() == null){
+            return ResponseEntity.badRequest().body(new PostCityResponse("City name cannot be empty"));
+        }
+
+        List<City> allCreatedCity = cityService.findAllByUserId(auth.getName());
+        boolean cityAlreadyExisted = allCreatedCity.stream().anyMatch(
+                c -> c.getCity().equalsIgnoreCase(dto.getCity())
+        );
+        if(cityAlreadyExisted){
+            return ResponseEntity.badRequest().body(new PostCityResponse("City already exists"));
+        }
+
         City city = new City(dto.getCity(), "test.jpg", dto.getDescription());
         Members member = membersService.findById(auth.getName());
         city.setMembers(member);
@@ -74,8 +87,12 @@ public class CityRestController {
 
     @PatchMapping("/city")
     public ResponseEntity<PatchCityResponse> updateCity(@RequestBody PatchCityRequest dto){
-        City patchedCity = cityService.patchCity(dto);
-        return ResponseEntity.ok(new PatchCityResponse(patchedCity.getCity()));
+        try {
+            City patchedCity = cityService.patchCity(dto);
+            return ResponseEntity.ok(new PatchCityResponse(patchedCity.getCity()));
+        } catch (IllegalStateException e){
+            return ResponseEntity.badRequest().body(new PatchCityResponse("No changes. Try again."));
+        }
     }
 
     @GetMapping("/user-info")

@@ -1,14 +1,21 @@
 <section class="section section_userList">
   <h1>User List</h1>
-  <form>
-    <label for="usernameList">username</label>
-    <input type="text" id="usernameList" name="usernameList" />
+  <form class="form form_login" (ngSubmit)="searchHandlerUser()" #loginForm="ngForm">
+    <label for="usernameList">Username:</label>
+    <input type="text" id="usernameList" name="usernameList" [(ngModel)]="username"/>
     <input type="submit" value="Search" />
-    <input type="reset" value="Reset" />
+    <input type="reset" value="Reset" (click)="onResetForm()"/>
   </form>
   @if (isFetching()) {
   <p>Loading users... ⏳</p>
-  } @else {
+  }
+  @else if(this.allUsersData()?.length === 0 && !wasSearched){
+    <p>No users yet... 😭</p>
+  }
+  @else if(this.allUsersData()?.length === 0 && wasSearched){
+    <p>No users were found... 🙈</p>
+  }
+  @else {
   <table>
     <thead>
       <tr>

@@ -19,7 +19,7 @@ public class Members {
     @Column(name = "active")
     private String active;
 
-    @OneToMany(mappedBy = "members")
+    @OneToMany(mappedBy = "members", cascade = CascadeType.ALL)
     private List<City> cities;
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)

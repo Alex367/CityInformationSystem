@@ -1,7 +1,7 @@
 <div class="section section_cityList">
   <h1>All your cities</h1>
   @if(isFetching() && !error()){
-  <p class="fallback-text">Fetching... ⏳</p>
+  <p class="fallback-text">Fetching cities... ⏳</p>
   } @if (error()) {
   <p class="fallback-text">{{ error() }}</p>
   } @if (cityData()) { @if (cityData()?.length === 0) {

@@ -1,10 +1,15 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../notification.service';
 import { AuthService } from '../../auth.service';
+import { catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-citypage',
@@ -22,6 +27,7 @@ export class CityPageComponent {
   notificationService = inject(NotificationService);
   isFilledParams = signal(false);
   authService = inject(AuthService);
+  errorMessage: string | null = null;
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
@@ -69,9 +75,25 @@ export class CityPageComponent {
             withCredentials: true,
           }
         )
+        .pipe(
+          catchError((err: HttpErrorResponse) => {
+            this.errorMessage = err.error?.city || 'An unknown error occurred';
+            console.log(this.errorMessage);
+
+            this.notificationService.show(
+              'error',
+              this.errorMessage ?? 'An unknown error occurred'
+            );
+
+            return throwError(
+              () => new Error(this.errorMessage ?? 'An unknown error occurred')
+            );
+          })
+        )
         .subscribe({
           next: (resData) => {
             console.log(resData);
+            this.errorMessage = null;
             this.notificationService.show('success', 'Added a new city!');
           },
         });
@@ -90,22 +112,36 @@ export class CityPageComponent {
             withCredentials: true,
           }
         )
+        .pipe(
+          catchError((err: HttpErrorResponse) => {
+            this.errorMessage = err.error?.city || 'An unknown error occurred';
+            console.log(this.errorMessage);
+
+            this.notificationService.show(
+              'error',
+              this.errorMessage ?? 'An unknown error occurred'
+            );
+
+            return throwError(
+              () => new Error(this.errorMessage ?? 'An unknown error occurred')
+            );
+          })
+        )
         .subscribe({
           next: (resData) => {
             console.log(resData);
+            this.errorMessage = null;
             this.notificationService.show(
               'success',
               'Information was changed successfully!'
             );
+            this.isFilledParams.set(false);
+            this.enteredCity = '';
+            this.enteredCountry = '';
+            this.enteredFile = '';
             this.router.navigate(['/cityList']);
           },
         });
-
-      this.isFilledParams.set(false);
     }
-
-    this.enteredCity = '';
-    this.enteredCountry = '';
-    this.enteredFile = '';
   }
 }

@@ -37,6 +37,7 @@ public class RolesDAOImpl implements RolesDAO{
 
 //        Members member = entityManager.find(Members.class, deletedUsername);
         Members member = roles.getMember();
+//        System.out.println(member.getUser_id());
         String deletedUsername = member.getUser_id();
         entityManager.remove(member);
 

@@ -50,6 +50,14 @@ public class CityServiceImpl implements CityService{
     @Transactional
     public City patchCity(PatchCityRequest dto) {
         City city = cityDAO.findById(dto.getId());
+
+        if(city.getCity().equals(dto.getCity())
+                && city.getDescription().equals(dto.getDescription())
+                && "test.jpg".equals(city.getPath_file())
+        ) {
+            throw new IllegalStateException("No changes detected");
+        }
+
         city.setCity(dto.getCity());
         city.setDescription(dto.getDescription());
         city.setPath_file("test.jpg");
