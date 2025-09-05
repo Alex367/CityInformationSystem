@@ -1,11 +1,9 @@
 .section_userList {
-  display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
   gap: 2.4rem;
   width: 500px;
 }
+
 table {
   border-collapse: collapse;
   width: 100%;

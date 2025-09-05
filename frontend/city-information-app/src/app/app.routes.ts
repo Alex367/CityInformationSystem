@@ -8,6 +8,8 @@ import { CityPageComponent } from './pages/citypage/citypage.component';
 import { CityListComponent } from './pages/city-list/city-list.component';
 import { AuthGuard } from './auth.guard';
 import { UserListComponent } from './pages/user-list/user-list.component';
+import { TypePageComponent } from './pages/typepage/typepage.component';
+import { TypeListComponent } from './pages/type-list/type-list.component';
 
 export const routes: Routes = [
   { path: '', component: MainpageComponent },
@@ -28,6 +30,18 @@ export const routes: Routes = [
   {
     path: 'cityList',
     component: CityListComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ROLE_EMPLOYEE', 'ROLE_ADMIN'] },
+  },
+  {
+    path: 'type',
+    component: TypePageComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ROLE_EMPLOYEE', 'ROLE_ADMIN'] },
+  },
+  {
+    path: 'typeList',
+    component: TypeListComponent,
     canActivate: [AuthGuard],
     data: { roles: ['ROLE_EMPLOYEE', 'ROLE_ADMIN'] },
   },

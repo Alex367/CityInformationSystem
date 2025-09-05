@@ -1,0 +1,33 @@
+<section class="section section_type">
+  <h1>Add type</h1>
+  <form class="form form_type" (ngSubmit)="onSubmit()">
+    <label for="typename">Type name: </label>
+    <input
+      type="text"
+      id="typename"
+      name="typename"
+      [(ngModel)]="enteredTypename"
+      required
+    />
+    <br />
+    <label for="typeAvatar">Upload image: </label>
+    <input
+      type="file"
+      id="typeAvatar"
+      name="typeAvatar"
+      [(ngModel)]="enteredTypeAvatar"
+      required
+    />
+    <br />
+    <label for="description">Description: </label>
+    <textarea
+      name="description"
+      id="description"
+      [(ngModel)]="enteredDescription"
+      required
+    >
+    </textarea>
+    <br />
+    <input type="submit" value="Add new type"/>
+  </form>
+</section>
