@@ -8,4 +8,5 @@ public interface TypeDAO {
     void addNewType(Type theType);
     List<Type> findAllTypes();
     String deleteType(String typeId);
+    Type findById(String typeId);
 }

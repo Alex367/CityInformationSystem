@@ -11,6 +11,7 @@ import { catchError, delay, map, throwError } from 'rxjs';
 import { MessageResponse, TypeI } from './type.model';
 import { AuthService } from '../../auth.service';
 import { NotificationService } from '../../notification.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-type-list',
@@ -20,13 +21,14 @@ import { NotificationService } from '../../notification.service';
 })
 export class TypeListComponent implements OnInit {
   isFetching = signal(true);
-  private httpClient = inject(HttpClient);
   error = signal('');
-  private destroyRef = inject(DestroyRef);
   authService = inject(AuthService);
-  notificationService = inject(NotificationService);
-
   typeData = signal<TypeI[] | undefined>(undefined);
+  
+  private notificationService = inject(NotificationService);
+  private destroyRef = inject(DestroyRef);
+  private httpClient = inject(HttpClient);
+  private router = inject(Router);
 
   ngOnInit() {
     this.isFetching.set(true);
@@ -83,5 +85,13 @@ export class TypeListComponent implements OnInit {
       });
   }
 
-  editHandler(typeItem: TypeI) {}
+  editHandler(typeItem: TypeI) {
+    this.router.navigate(['/type'], {
+      queryParams: {
+        id: typeItem.id,
+        type: typeItem.type,
+        description: typeItem.description,
+      },
+    });
+  }
 }

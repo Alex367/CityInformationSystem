@@ -28,6 +28,9 @@
     >
     </textarea>
     <br />
-    <input type="submit" value="Add new type"/>
+    <input
+      type="submit"
+      [value]="isFilledParams() ? 'Patch the type' : 'Add new type'"
+    />
   </form>
 </section>

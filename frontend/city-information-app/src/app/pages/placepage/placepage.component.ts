@@ -1,11 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-placepage',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './placepage.component.html',
   styleUrl: './placepage.component.css'
 })
-export class PlacepageComponent {
+export class PlacePageComponent implements OnInit{
+  enteredSelectedCity = '';
+  enteredSelectedType = '';
+  enteredPlacename = '';
+  enteredPlaceAvatar = '';
+  enteredPlaceDescription = '';
+  isFilledParams = signal(false);
+  
+
+  ngOnInit(): void {
+    
+  }
+
+  onSubmit(){
+    console.log('sub')
+  }
 
 }

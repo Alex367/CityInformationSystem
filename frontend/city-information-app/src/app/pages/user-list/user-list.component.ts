@@ -82,7 +82,7 @@ export class UserListComponent implements OnInit {
   searchHandlerUser() {
     let currentUsers: Users[] = [];
 
-    if (!this.username.trim()) {
+    if (!this.username) {
       return;
     }
 

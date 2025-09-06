@@ -3,7 +3,7 @@ import {
   HttpErrorResponse,
   HttpHeaders,
 } from '@angular/common/http';
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
@@ -17,7 +17,7 @@ import { catchError, throwError } from 'rxjs';
   templateUrl: './citypage.component.html',
   styleUrl: './citypage.component.css',
 })
-export class CityPageComponent {
+export class CityPageComponent implements OnInit{
   receivedId = '';
   enteredCity = '';
   enteredCountry = '';
@@ -94,6 +94,9 @@ export class CityPageComponent {
           next: (resData) => {
             console.log(resData);
             this.errorMessage = null;
+            this.enteredCity = '';
+            this.enteredCountry = '';
+            this.enteredFile = '';
             this.notificationService.show('success', 'Added a new city!');
           },
         });

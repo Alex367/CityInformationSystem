@@ -35,4 +35,9 @@ public class TypeDAOImpl implements TypeDAO{
         entityManager.remove(foundType);
         return foundType.getType();
     }
+
+    @Override
+    public Type findById(String typeId) {
+        return entityManager.find(Type.class, typeId);
+    }
 }

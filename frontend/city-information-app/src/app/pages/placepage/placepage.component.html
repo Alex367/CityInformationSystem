@@ -1,1 +1,50 @@
-<p>placepage works!</p>
+<section class="section section_place">
+  <h1>Add place</h1>
+  <form class="form form_place" (ngSubmit)="onSubmit()">
+    <label for="city">Select city: </label>
+    <select name="city" id="city">
+      <option value="">--Please choose an option--</option>
+      <option value="dog">Dog</option>
+      <option value="cat">Cat</option>
+    </select>
+    <br />
+    <label for="type">Select type: </label>
+    <select name="type" id="type">
+      <option value="">--Please choose an option--</option>
+      <option value="dog">Dog</option>
+      <option value="cat">Cat</option>
+    </select>
+    <br />
+    <label for="placeName">Place name: </label>
+    <input
+      type="text"
+      id="placeName"
+      name="placeName"
+      [(ngModel)]="enteredPlacename"
+      required
+    />
+    <br />
+    <label for="placeAvatar">Upload image: </label>
+    <input
+      type="file"
+      id="placeAvatar"
+      name="placeAvatar"
+      [(ngModel)]="enteredPlaceAvatar"
+      required
+    />
+    <br />
+    <label for="placeDescription">Description: </label>
+    <textarea
+      name="placeDescription"
+      id="placeDescription"
+      [(ngModel)]="enteredPlaceDescription"
+      required
+    >
+    </textarea>
+    <br />
+    <input
+      type="submit"
+      [value]="isFilledParams() ? 'Patch the place' : 'Add new place'"
+    />
+  </form>
+</section>
