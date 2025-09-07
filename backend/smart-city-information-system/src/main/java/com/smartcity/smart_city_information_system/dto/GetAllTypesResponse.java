@@ -1,15 +1,11 @@
 package com.smartcity.smart_city_information_system.dto;
 
 import com.smartcity.smart_city_information_system.entity.Type;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
-import java.util.List;
-
-@Data
-@AllArgsConstructor
-public class GetAllTypesResponse {
-
-    private List<Type> message;
-
+public record GetAllTypesResponse(int id, String type, String path_file, String description) {
+    public static GetAllTypesResponse from(Type type){
+        return new GetAllTypesResponse(
+                type.getId(), type.getType(), type.getPath_file(), type.getDescription()
+        );
+    }
 }

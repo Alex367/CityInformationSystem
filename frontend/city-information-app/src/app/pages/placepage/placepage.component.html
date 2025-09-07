@@ -1,18 +1,23 @@
 <section class="section section_place">
   <h1>Add place</h1>
+  @if (isFetching()) {
+  <p class="fallback-text">Fetching data... ⏳</p>
+  } @else {
   <form class="form form_place" (ngSubmit)="onSubmit()">
     <label for="city">Select city: </label>
-    <select name="city" id="city">
+    <select name="city" id="city" [(ngModel)]="enteredSelectedCity">
       <option value="">--Please choose an option--</option>
-      <option value="dog">Dog</option>
-      <option value="cat">Cat</option>
+      @for (item of cityData(); track $index) {
+      <option value="{{ item.city }}">{{ item.city }}</option>
+      }
     </select>
     <br />
     <label for="type">Select type: </label>
-    <select name="type" id="type">
+    <select name="type" id="type" [(ngModel)]="enteredSelectedType">
       <option value="">--Please choose an option--</option>
-      <option value="dog">Dog</option>
-      <option value="cat">Cat</option>
+      @for (item of typeData(); track $index) {
+      <option value="{{ item.type }}">{{ item.type }}</option>
+      }
     </select>
     <br />
     <label for="placeName">Place name: </label>
@@ -47,4 +52,6 @@
       [value]="isFilledParams() ? 'Patch the place' : 'Add new place'"
     />
   </form>
+
+  }
 </section>

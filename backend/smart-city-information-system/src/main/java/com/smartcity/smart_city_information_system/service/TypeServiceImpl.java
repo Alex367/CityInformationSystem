@@ -59,4 +59,9 @@ public class TypeServiceImpl implements TypeService{
 
         return type;
     }
+
+    @Override
+    public Type findByTypeName(String typeName) {
+        return typeDAO.findByTypeName(typeName);
+    }
 }

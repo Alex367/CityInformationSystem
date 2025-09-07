@@ -2,6 +2,9 @@ package com.smartcity.smart_city_information_system.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "city")
 public class City {
@@ -19,6 +22,9 @@ public class City {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Members members;
+
+    @OneToMany(mappedBy = "theCity", cascade = CascadeType.ALL)
+    private List<Place> places;
 
     public City() {
     }
@@ -53,6 +59,14 @@ public class City {
         this.path_file = path_file;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Members getMembers() {
         return members;
     }
@@ -61,12 +75,21 @@ public class City {
         this.members = members;
     }
 
-    public String getDescription() {
-        return description;
+    public List<Place> getPlaces() {
+        return places;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPlaces(List<Place> places) {
+        this.places = places;
+    }
+
+    public void add(Place tempPlace){
+        if(places == null){
+            places = new ArrayList<>();
+        }
+        places.add(tempPlace);
+
+        tempPlace.setTheCity(this);
     }
 
     @Override
@@ -76,6 +99,8 @@ public class City {
                 ", city='" + city + '\'' +
                 ", path_file='" + path_file + '\'' +
                 ", description='" + description + '\'' +
+                ", members=" + members +
+                ", places=" + places +
                 '}';
     }
 }

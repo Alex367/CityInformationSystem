@@ -11,4 +11,5 @@ public interface TypeService {
     String deleteType(String typeId);
     Type findById(String typeId);
     Type patchType(PatchTypeRequest dto);
+    Type findByTypeName(String typeName);
 }

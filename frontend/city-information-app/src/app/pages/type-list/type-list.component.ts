@@ -33,12 +33,12 @@ export class TypeListComponent implements OnInit {
   ngOnInit() {
     this.isFetching.set(true);
     const subscription = this.httpClient
-      .get<{ message: TypeI[] }>('http://localhost:8080/api/typeList', {
+      .get<{ types: TypeI[] }>('http://localhost:8080/api/typeList', {
         withCredentials: true,
       })
       .pipe(
         delay(1000),
-        map((response) => response.message),
+        map((response) => response.types),
         catchError((error) => {
           console.log(error);
           return throwError(() => new Error('Something went wrong'));

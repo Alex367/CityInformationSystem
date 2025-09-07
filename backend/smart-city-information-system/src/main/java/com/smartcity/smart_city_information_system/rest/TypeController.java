@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -24,12 +25,24 @@ public class TypeController {
     }
 
     @PostMapping("/type")
-    public ResponseEntity<PostTypeResponse> addNewType(@RequestBody PostTypeRequest dao){
+    public ResponseEntity<PostTypeResponse> addNewType(@RequestBody PostTypeRequest dto){
 
-        Type theType = new Type(dao.getTypename(), "test.jpg", dao.getDescription());
+        if(dto.getTypename() == null){
+            return ResponseEntity.badRequest().body(new PostTypeResponse("Type name cannot be empty"));
+        }
+
+        List<Type> allCreatedTypes = typeService.findAllTypes();
+        boolean typeAlreadyExisted = allCreatedTypes.stream().anyMatch(
+                t -> t.getType().equalsIgnoreCase(dto.getTypename())
+        );
+        if(typeAlreadyExisted){
+            return ResponseEntity.badRequest().body(new PostTypeResponse("Type already exists"));
+        }
+
+        Type theType = new Type(dto.getTypename(), "test.jpg", dto.getDescription());
 
         typeService.addNewType(theType);
-        return ResponseEntity.ok(new PostTypeResponse(dao.getTypename()));
+        return ResponseEntity.ok(new PostTypeResponse(dto.getTypename()));
     }
 
     @PatchMapping("/type")
@@ -49,9 +62,11 @@ public class TypeController {
     }
 
     @GetMapping("/typeList")
-    public ResponseEntity<GetAllTypesResponse> addNewType(){
-        List<Type> res = typeService.findAllTypes();
-        return ResponseEntity.ok(new GetAllTypesResponse(res));
+    public Map<String, List<GetAllTypesResponse>> addNewType(){
+        List<GetAllTypesResponse> allTypes = typeService.findAllTypes()
+                .stream().map(GetAllTypesResponse::from)
+                .toList();
+        return Map.of("types", allTypes);
     }
 
     @DeleteMapping("/typeList/{typeId}")

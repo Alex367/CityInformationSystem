@@ -53,4 +53,11 @@ public class CityDAOImpl implements CityDAO{
         ).setParameter("userId", userId).getResultList();
     }
 
+    @Override
+    public City findByCityName(String cityName) {
+        return entityManager.createQuery(
+                "select c from City c where c.city = :cityName", City.class
+        ).setParameter("cityName", cityName).getSingleResult();
+    }
+
 }

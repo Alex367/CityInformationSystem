@@ -9,4 +9,5 @@ public interface TypeDAO {
     List<Type> findAllTypes();
     String deleteType(String typeId);
     Type findById(String typeId);
+    Type findByTypeName(String typeName);
 }

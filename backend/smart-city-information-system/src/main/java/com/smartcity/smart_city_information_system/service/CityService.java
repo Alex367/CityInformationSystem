@@ -12,4 +12,5 @@ public interface CityService {
     City findById(String id);
     List<City> findAllByUserId(String userId);
     City patchCity(PatchCityRequest dto);
+    City findByCityName(String cityName);
 }

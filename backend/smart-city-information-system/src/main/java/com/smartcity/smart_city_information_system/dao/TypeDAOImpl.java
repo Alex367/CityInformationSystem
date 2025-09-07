@@ -40,4 +40,10 @@ public class TypeDAOImpl implements TypeDAO{
     public Type findById(String typeId) {
         return entityManager.find(Type.class, typeId);
     }
+
+    @Override
+    public Type findByTypeName(String typeName) {
+        return entityManager.createQuery("select t from Type t where t.type = :typeName", Type.class
+        ).setParameter("typeName", typeName).getSingleResult();
+    }
 }
