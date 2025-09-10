@@ -37,7 +37,7 @@ export class PlacePageComponent implements OnInit {
         withCredentials: true,
       })
       .pipe(
-        delay(1000),
+        delay(300),
         map((response) => response.cities),
         catchError((error) => {
           console.log(error);
@@ -102,7 +102,7 @@ export class PlacePageComponent implements OnInit {
       )
       .pipe(
         catchError((err: HttpErrorResponse) => {
-          this.errorMessage = err.error?.city || 'An unknown error occurred';
+          this.errorMessage = err.error?.message || 'An unknown error occurred';
           console.log(this.errorMessage);
 
           this.notificationService.show(

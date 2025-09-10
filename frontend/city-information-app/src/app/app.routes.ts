@@ -12,6 +12,7 @@ import { TypePageComponent } from './pages/typepage/typepage.component';
 import { TypeListComponent } from './pages/type-list/type-list.component';
 import { PlacePageComponent } from './pages/placepage/placepage.component';
 import { PlaceListComponent } from './pages/place-list/place-list.component';
+import { RequestListComponent } from './pages/request-list/request-list.component';
 
 export const routes: Routes = [
   { path: '', component: MainpageComponent },
@@ -62,6 +63,12 @@ export const routes: Routes = [
   {
     path: 'placeList',
     component: PlaceListComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ROLE_EMPLOYEE', 'ROLE_ADMIN'] },
+  },
+  {
+    path: 'requestList',
+    component: RequestListComponent,
     canActivate: [AuthGuard],
     data: { roles: ['ROLE_EMPLOYEE', 'ROLE_ADMIN'] },
   },

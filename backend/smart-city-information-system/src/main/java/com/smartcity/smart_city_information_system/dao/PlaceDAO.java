@@ -7,4 +7,6 @@ import java.util.List;
 public interface PlaceDAO {
     List<Place> findAllPlaces();
     void addNewPlace(Place thePlace);
+    List<Place> findAllPlacesByUserId(String userId);
+    String deletePlace(String placeId);
 }

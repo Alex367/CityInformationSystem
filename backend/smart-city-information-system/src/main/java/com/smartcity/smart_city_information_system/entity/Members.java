@@ -25,6 +25,9 @@ public class Members {
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private Roles role;
 
+    @OneToMany(mappedBy = "request_members", cascade = CascadeType.ALL)
+    private List<Request> requests;
+
     public Members() {
     }
 
@@ -32,6 +35,14 @@ public class Members {
         this.pw = pw;
         this.active = active;
         this.user_id = user_id;
+    }
+
+    public List<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
     }
 
     public Roles getRole() {
@@ -91,6 +102,7 @@ public class Members {
                 ", active='" + active + '\'' +
                 ", cities=" + cities +
                 ", role=" + role +
+                ", requests=" + requests +
                 '}';
     }
 }

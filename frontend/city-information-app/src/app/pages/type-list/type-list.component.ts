@@ -12,6 +12,7 @@ import { MessageResponse, TypeI } from './type.model';
 import { AuthService } from '../../auth.service';
 import { NotificationService } from '../../notification.service';
 import { Router } from '@angular/router';
+import { SharedDataService } from '../../shared-data.service';
 
 @Component({
   selector: 'app-type-list',
@@ -29,6 +30,7 @@ export class TypeListComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private httpClient = inject(HttpClient);
   private router = inject(Router);
+  private sharedDataService = inject(SharedDataService);
 
   ngOnInit() {
     this.isFetching.set(true);
@@ -86,12 +88,7 @@ export class TypeListComponent implements OnInit {
   }
 
   editHandler(typeItem: TypeI) {
-    this.router.navigate(['/type'], {
-      queryParams: {
-        id: typeItem.id,
-        type: typeItem.type,
-        description: typeItem.description,
-      },
-    });
+    this.sharedDataService.setTypeEdit(typeItem);
+    this.router.navigate(['/type']);
   }
 }

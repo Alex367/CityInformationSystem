@@ -1,6 +1,9 @@
 <section class="section section_type">
   <h1>Add type</h1>
-  <form class="form form_type" (ngSubmit)="onSubmit()">
+  <form
+    class="form form_type"
+    (ngSubmit)="authService.isAdmin() ? onSubmit() : onCreateNewRequest()"
+  >
     <label for="typename">Type name: </label>
     <input
       type="text"
@@ -28,9 +31,39 @@
     >
     </textarea>
     <br />
+    @if (!(authService.isAdmin() && responseMode() === false)) {
+    <label for="request">Request: </label>
+    <textarea
+      name="request"
+      id="request"
+      [(ngModel)]="enteredRequest"
+      required
+      maxlength="100"
+    >
+    </textarea>
+    } @if (authService.isAdmin() && responseMode()) {
+    <label for="response">Response: </label>
+    <textarea
+      name="response"
+      id="response"
+      [(ngModel)]="enteredResponse"
+      required
+      maxlength="100"
+    >
+    </textarea>
+    }
+    <br />
     <input
       type="submit"
-      [value]="isFilledParams() ? 'Patch the type' : 'Add new type'"
+      [value]="
+        authService.isAdmin()
+          ? isFilledParams()
+            ? 'Patch the type'
+            : responseMode()
+            ? 'Answer'
+            : 'Add new type'
+          : 'Send new request'
+      "
     />
   </form>
 </section>

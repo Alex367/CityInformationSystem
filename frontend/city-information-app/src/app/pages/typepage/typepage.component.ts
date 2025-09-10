@@ -1,9 +1,11 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { catchError, throwError } from 'rxjs';
+import { catchError, share, throwError } from 'rxjs';
 import { NotificationService } from '../../notification.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../auth.service';
+import { SharedDataService } from '../../shared-data.service';
 
 @Component({
   selector: 'app-typepage',
@@ -11,46 +13,39 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './typepage.component.html',
   styleUrl: './typepage.component.css',
 })
-export class TypePageComponent implements OnInit{
+export class TypePageComponent implements OnInit, OnDestroy {
   receivedId = '';
   enteredTypename = '';
   enteredTypeAvatar = '';
   enteredDescription = '';
+  enteredRequest = '';
+  enteredStatus = '';
+  enteredResponse = '';
   notificationService = inject(NotificationService);
   errorMessage: string | null = null;
   isFilledParams = signal(false);
-  private destroyRef = inject(DestroyRef);
+  authService = inject(AuthService);
+  sharedService = inject(SharedDataService);
+  responseMode = signal(false);
 
   private httpClient = inject(HttpClient);
-
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  private router = inject(Router);
 
   ngOnInit() {
-    const subscription = this.route.queryParams.subscribe((params) => {
-      const idValue = params['id'];
-      const typeValue = params['type'];
-      const descriptionValue = params['description'];
-
-      // console.log(typeValue);
-
-      if (
-        typeValue === undefined ||
-        idValue === undefined ||
-        descriptionValue === undefined
-      ) {
-        this.isFilledParams.set(false);
-        return;
-      }
-
-      this.receivedId = idValue;
-      this.enteredTypename = typeValue;
-      this.enteredDescription = descriptionValue;
+    if(this.sharedService.editTypeData()){
+      this.receivedId = String(this.sharedService.editTypeData()?.id) || "";
+      this.enteredTypename = this.sharedService.editTypeData()?.type || "";
+      this.enteredDescription = this.sharedService.editTypeData()?.description || "";
       this.isFilledParams.set(true);
-    });
-
-    this.destroyRef.onDestroy(() => {
-      subscription.unsubscribe();
-    });
+    }
+    if(this.sharedService.editRequestData()){
+      this.receivedId = String(this.sharedService.editRequestData()?.id) || "";
+      this.enteredRequest = String(this.sharedService.editRequestData()?.request) || "";
+      this.enteredTypename = this.sharedService.editRequestData()?.type || "";
+      this.enteredDescription = this.sharedService.editRequestData()?.description || "";
+      this.enteredStatus = this.sharedService.editRequestData()?.status || "";
+      this.responseMode.set(true);
+    }
   }
 
   onSubmit() {
@@ -108,6 +103,7 @@ export class TypePageComponent implements OnInit{
         });
     } else {
       console.log('Pathed');
+
       this.httpClient
         .patch(
           'http://localhost:8080/api/type',
@@ -123,7 +119,8 @@ export class TypePageComponent implements OnInit{
         )
         .pipe(
           catchError((err: HttpErrorResponse) => {
-            this.errorMessage = err.error?.typename || 'An unknown error occurred';
+            this.errorMessage =
+              err.error?.typename || 'An unknown error occurred';
             console.log(this.errorMessage);
 
             this.notificationService.show(
@@ -153,4 +150,56 @@ export class TypePageComponent implements OnInit{
         });
     }
   }
+
+  onCreateNewRequest() {
+    console.log('new request');
+
+    this.httpClient
+      .post(
+        'http://localhost:8080/api/request',
+        {
+          request: this.enteredRequest,
+          type: this.enteredTypename,
+          path_file: this.enteredTypeAvatar,
+          description: this.enteredDescription,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          this.errorMessage = err.error?.message || 'An unknown error occurred';
+          console.log(this.errorMessage);
+
+          this.notificationService.show(
+            'error',
+            this.errorMessage ?? 'An unknown error occurred'
+          );
+
+          return throwError(
+            () => new Error(this.errorMessage ?? 'An unknown error occurred')
+          );
+        })
+      )
+      .subscribe({
+        next: (resData) => {
+          console.log(resData);
+          this.errorMessage = null;
+          this.enteredRequest = '';
+          this.enteredTypename = '';
+          this.enteredTypeAvatar = '';
+          this.enteredDescription = '';
+
+          this.notificationService.show('success', 'Request was sent!');
+        },
+      });
+  }
+
+
+  ngOnDestroy(){
+    this.sharedService.clearRequest();
+    this.responseMode.set(false);
+  }
+
 }

@@ -1,5 +1,6 @@
 package com.smartcity.smart_city_information_system.rest;
 
+import com.smartcity.smart_city_information_system.dto.DeletePlaceResponse;
 import com.smartcity.smart_city_information_system.dto.GetAllPlacesResponse;
 import com.smartcity.smart_city_information_system.dto.PostPlaceRequest;
 import com.smartcity.smart_city_information_system.dto.PostPlaceResponse;
@@ -34,11 +35,21 @@ public class PlaceController {
     }
 
     @PostMapping("/place")
-    public ResponseEntity<PostPlaceResponse> createPlace(@RequestBody PostPlaceRequest dao){
-        Place thePlace = new Place(dao.getPlace(), dao.getDescription());
+    public ResponseEntity<PostPlaceResponse> createPlace(@RequestBody PostPlaceRequest dto){
+        Place thePlace = new Place(dto.getPlace(), dto.getDescription());
 
-        City theCity = cityService.findByCityName(dao.getCity());
-        Type theType = typeService.findByTypeName(dao.getType());
+        City theCity = cityService.findByCityName(dto.getCity());
+        Type theType = typeService.findByTypeName(dto.getType());
+
+        List<Place> allCreatedPlaces = placeService.findAllPlaces();
+        boolean placeAlreadyExisted = allCreatedPlaces.stream().anyMatch(
+                p -> p.getPlace().equalsIgnoreCase(dto.getPlace()) &&
+                        p.getTheCity().getCity().equalsIgnoreCase(dto.getCity()) &&
+                        p.getTheType().getType().equalsIgnoreCase(dto.getType())
+        );
+        if(placeAlreadyExisted){
+            return ResponseEntity.badRequest().body(new PostPlaceResponse("Place already exists"));
+        }
 
         thePlace.setTheCity(theCity);
         thePlace.setTheType(theType);
@@ -49,11 +60,16 @@ public class PlaceController {
 
     @GetMapping("/placeList")
     public Map<String, List<GetAllPlacesResponse>> getPlaces(Authentication auth){
-        System.out.println(auth.getName());
-        List<GetAllPlacesResponse> places = placeService.findAllPlaces()
+        List<GetAllPlacesResponse> places = placeService.findAllPlacesByUserId(auth.getName())
                 .stream().map(GetAllPlacesResponse::from).toList();
 
         return Map.of("places", places);
+    }
+
+    @DeleteMapping("/placeList/{placeId}")
+    public ResponseEntity<DeletePlaceResponse> deletePlace(@PathVariable String placeId){
+        String removedPlace = placeService.deletePlace(placeId);
+        return ResponseEntity.ok(new DeletePlaceResponse(removedPlace));
     }
 
 }

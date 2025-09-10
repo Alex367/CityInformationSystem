@@ -8,5 +8,6 @@ public interface PlaceService {
 
     List<Place> findAllPlaces();
     void addNewPlace(Place thePlace);
-
+    List<Place> findAllPlacesByUserId(String userId);
+    String deletePlace(String placeId);
 }

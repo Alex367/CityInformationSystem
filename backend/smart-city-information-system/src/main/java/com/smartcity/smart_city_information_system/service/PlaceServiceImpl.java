@@ -27,4 +27,15 @@ public class PlaceServiceImpl implements PlaceService{
     public void addNewPlace(Place thePlace) {
         placeDAO.addNewPlace(thePlace);
     }
+
+    @Override
+    public List<Place> findAllPlacesByUserId(String userId) {
+        return placeDAO.findAllPlacesByUserId(userId);
+    }
+
+    @Transactional
+    @Override
+    public String deletePlace(String placeId) {
+        return placeDAO.deletePlace(placeId);
+    }
 }

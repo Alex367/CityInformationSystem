@@ -1,0 +1,48 @@
+<section class="section section_requestList">
+  <h1>Request List</h1>
+  @if (isFetching()) {
+  <p>Loading all requests... ⏳</p>
+  } @else if(this.requestData()?.length === 0){
+  <p>No requests yet... 😭</p>
+  } @else {
+  <table>
+    <thead>
+      <tr>
+        <th>Request</th>
+        <th>Response</th>
+        <th>Type</th>
+        <th>Username</th>
+        <th>Status</th>
+        @if (authService.isAdmin()) {
+        <th>Action</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of requestData(); track $index) {
+      <tr>
+        <td>{{ item.request }}</td>
+        <td>
+          <div>{{ item.response }}</div>
+          @if (authService.isAdmin()) {
+          <button
+            (click)="sendResponseHandler(item)"
+          >
+            Send response
+          </button>
+          }
+        </td>
+        <td>{{ item.type }}</td>
+        <td>{{ item.user_id }}</td>
+        <td>{{ item.status }}</td>
+        @if (authService.isAdmin()) {
+        <td>
+          <button (click)="deleteRequestHandler()">Delete</button>
+        </td>
+        }
+      </tr>
+      }
+    </tbody>
+  </table>
+  }
+</section>

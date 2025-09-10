@@ -30,14 +30,9 @@ public class RolesDAOImpl implements RolesDAO{
 
     @Override
     public String deleteUser(String id) {
-//        System.out.println(id);
         int roleId = Integer.parseInt(id);
         Roles roles = entityManager.find(Roles.class, roleId);
-//        String deletedUsername = roles.getMember().getUser_id();
-
-//        Members member = entityManager.find(Members.class, deletedUsername);
         Members member = roles.getMember();
-//        System.out.println(member.getUser_id());
         String deletedUsername = member.getUser_id();
         entityManager.remove(member);
 
