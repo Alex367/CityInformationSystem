@@ -30,9 +30,9 @@ public class Place {
     public Place() {
     }
 
-    public Place(String place, String description) {
+    public Place(String place, String path_file, String description) {
         this.place = place;
-        this.path_file = "test.jpg";
+        this.path_file = path_file;
         this.description = description;
     }
 

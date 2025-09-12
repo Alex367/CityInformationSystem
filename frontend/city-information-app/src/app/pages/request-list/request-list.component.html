@@ -23,13 +23,10 @@
       <tr>
         <td>{{ item.request }}</td>
         <td>
+          @if (authService.isAdmin() && item.status === 'PENDING') {
+          <button (click)="sendResponseHandler(item)">Send response</button>
+          } @else {
           <div>{{ item.response }}</div>
-          @if (authService.isAdmin()) {
-          <button
-            (click)="sendResponseHandler(item)"
-          >
-            Send response
-          </button>
           }
         </td>
         <td>{{ item.type }}</td>
@@ -37,7 +34,7 @@
         <td>{{ item.status }}</td>
         @if (authService.isAdmin()) {
         <td>
-          <button (click)="deleteRequestHandler()">Delete</button>
+          <button (click)="deleteRequestHandler(item.id)">Delete</button>
         </td>
         }
       </tr>

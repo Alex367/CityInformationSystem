@@ -7,4 +7,7 @@ import java.util.List;
 public interface RequestDAO {
     String addNewRequest(Request theRequest);
     List<Request> findAllRequests();
+    Request findById(int requestId);
+    List<Request> findAllRequestsByUser(String userId);
+    void deleteRequestById(String requestId);
 }

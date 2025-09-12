@@ -16,4 +16,7 @@ public interface CityDAO {
     List<City> findAllByUserId(String userId);
 
     City findByCityName(String cityName);
+
+    City findByCityNameUserId(String userId, String cityName);
+
 }

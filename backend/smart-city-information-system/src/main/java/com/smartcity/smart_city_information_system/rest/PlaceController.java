@@ -35,10 +35,10 @@ public class PlaceController {
     }
 
     @PostMapping("/place")
-    public ResponseEntity<PostPlaceResponse> createPlace(@RequestBody PostPlaceRequest dto){
-        Place thePlace = new Place(dto.getPlace(), dto.getDescription());
+    public ResponseEntity<PostPlaceResponse> createPlace(@RequestBody PostPlaceRequest dto, Authentication auth){
+        Place thePlace = new Place(dto.getPlace(), "test.jpg", dto.getDescription());
 
-        City theCity = cityService.findByCityName(dto.getCity());
+        City theCity = cityService.findByCityNameUserId(auth.getName(), dto.getCity());
         Type theType = typeService.findByTypeName(dto.getType());
 
         List<Place> allCreatedPlaces = placeService.findAllPlaces();

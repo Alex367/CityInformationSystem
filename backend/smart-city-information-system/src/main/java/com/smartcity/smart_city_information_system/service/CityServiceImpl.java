@@ -70,5 +70,10 @@ public class CityServiceImpl implements CityService{
         return cityDAO.findByCityName(cityName);
     }
 
+    @Override
+    public City findByCityNameUserId(String userId, String cityName) {
+        return cityDAO.findByCityNameUserId(userId, cityName);
+    }
+
 
 }
