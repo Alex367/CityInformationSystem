@@ -6,33 +6,35 @@
     <input type="submit" value="Search" />
     <input type="reset" value="Reset" (click)="onResetForm()"/>
   </form>
-  @if (isFetching()) {
-  <p>Loading users... ⏳</p>
-  }
-  @else if(this.allUsersData()?.length === 0 && !wasSearched){
+  @if (this.allUsersData()?.length === 0) {
     <p>No users yet... 😭</p>
   }
-  @else if(this.allUsersData()?.length === 0 && wasSearched){
-    <p>No users were found... 🙈</p>
-  }
-  @else {
-  <table>
-    <thead>
-      <tr>
-        <th>Username</th>
-        <th>Role</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (item of allUsersData(); track $index) {
-      <tr>
-        <td>{{ item.user_id }}</td>
-        <td>{{ item.role }}</td>
-        <td><button (click)="deleteUserHandler(item.id)">Delete</button></td>
-      </tr>
-      }
-    </tbody>
-  </table>
+  @else{
+    @if (isFetching()) {
+    <p>Loading users... ⏳</p>
+    }
+    @else if(this.searchData()?.length === 0){
+      <p>No users were found... 🙈</p>
+    }
+    @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Role</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of searchData(); track $index) {
+        <tr>
+          <td>{{ item.user_id }}</td>
+          <td>{{ item.role }}</td>
+          <td><button (click)="deleteUserHandler(item.id)">Delete</button></td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    }
   }
 </section>

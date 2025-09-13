@@ -1,5 +1,7 @@
 <div class="section section_cityList">
   <h1>All your cities</h1>
+  <p class="section__description">The list of your places</p>
+
   @if(isFetching() && !error()){
   <p class="fallback-text">Fetching places... ⏳</p>
   } @if (error()) {

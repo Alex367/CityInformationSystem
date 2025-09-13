@@ -16,11 +16,11 @@ export class UserListComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   isFetching = signal(true);
   error = signal('');
-  allUsersData = signal<Users[] | undefined>(undefined);
   notificationService = inject(NotificationService);
   username = '';
-  searchUsers: Users[] = [];
-  wasSearched = false;
+
+  searchData = signal<Users[] | undefined>(undefined);
+  allUsersData = signal<Users[] | undefined>(undefined);
 
   ngOnInit() {
     this.isFetching.set(true);
@@ -29,7 +29,7 @@ export class UserListComponent implements OnInit {
         withCredentials: true,
       })
       .pipe(
-        delay(1000),
+        delay(300),
         map((response) => response.users),
         catchError((error) => {
           console.log(error);
@@ -39,7 +39,7 @@ export class UserListComponent implements OnInit {
       .subscribe({
         next: (usersResponse) => {
           console.log(usersResponse);
-          this.searchUsers = usersResponse;
+          this.searchData.set(usersResponse);
           this.allUsersData.set(usersResponse);
         },
         error: (error) => {
@@ -67,10 +67,19 @@ export class UserListComponent implements OnInit {
       .subscribe({
         next: (resData) => {
           console.log(resData);
+
+          // console.log('to delete: ' + JSON.stringify(this.searchData()));
+
           this.allUsersData.update(
             (users) => users?.filter((c) => c.id !== userId) ?? []
           );
-          this.searchUsers = this.allUsersData() ?? [];
+          this.searchData.update(
+            (users) => users?.filter((u) => u.id !== userId) ?? []
+          );
+
+          // console.log('sear ' + JSON.stringify(this.searchData()));
+          // console.log('all ' + JSON.stringify(this.allUsersData()));
+
           this.notificationService.show(
             'success',
             `${resData.user} was deleted!`
@@ -80,8 +89,6 @@ export class UserListComponent implements OnInit {
   }
 
   searchHandlerUser() {
-    let currentUsers: Users[] = [];
-
     if (!this.username) {
       return;
     }
@@ -91,28 +98,14 @@ export class UserListComponent implements OnInit {
       return;
     }
 
-    // if nothing to search
-    if (this.searchUsers.length === 0) {
-      return;
-    }
-
-    if (this.wasSearched) {
-      currentUsers = this.searchUsers;
-      this.wasSearched = false;
-    } else {
-      currentUsers = this.allUsersData()!;
-    }
-
-    const filteredUsers = currentUsers?.filter((user) =>
+    const filteredUsers = this.allUsersData()?.filter((user) =>
       user.user_id.toLowerCase().includes(this.username.toLowerCase())
     );
 
-    this.allUsersData.set(filteredUsers);
-
-    this.wasSearched = true;
+    this.searchData.set(filteredUsers);
   }
 
   onResetForm() {
-    this.allUsersData.set(this.searchUsers);
+    this.searchData.set(this.allUsersData());
   }
 }

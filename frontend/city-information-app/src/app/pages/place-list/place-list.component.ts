@@ -26,7 +26,7 @@ export class PlaceListComponent implements OnInit {
         withCredentials: true,
       })
       .pipe(
-        delay(500),
+        delay(300),
         map((response) => response.places),
         catchError((error) => {
           console.log(error);

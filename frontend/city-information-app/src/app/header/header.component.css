@@ -8,6 +8,15 @@
     display: flex;
     gap: 1.2rem;
 }
+
+.navigation_items li{
+    padding: .4rem;
+}
+
+li:hover{
+    color: #0E4749;
+}
+
 .navigation_items li a{
     text-decoration: none;
     color: var(--nav_color);

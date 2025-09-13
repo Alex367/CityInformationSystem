@@ -39,7 +39,7 @@ export class TypeListComponent implements OnInit {
         withCredentials: true,
       })
       .pipe(
-        delay(1000),
+        delay(300),
         map((response) => response.types),
         catchError((error) => {
           console.log(error);

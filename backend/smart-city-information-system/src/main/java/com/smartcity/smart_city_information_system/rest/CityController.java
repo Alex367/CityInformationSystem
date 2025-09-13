@@ -3,8 +3,10 @@ package com.smartcity.smart_city_information_system.rest;
 import com.smartcity.smart_city_information_system.dto.*;
 import com.smartcity.smart_city_information_system.entity.City;
 import com.smartcity.smart_city_information_system.entity.Members;
+import com.smartcity.smart_city_information_system.exception.AlreadyExistedEntityException;
 import com.smartcity.smart_city_information_system.service.CityService;
 import com.smartcity.smart_city_information_system.service.MembersService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,18 +31,14 @@ public class CityController {
     }
 
     @PostMapping("/city")
-    public ResponseEntity<PostCityResponse> createCity(@RequestBody PostCityRequest dto, Authentication auth){
-
-        if(dto.getCity() == null){
-            return ResponseEntity.badRequest().body(new PostCityResponse("City name cannot be empty"));
-        }
+    public ResponseEntity<PostCityResponse> createCity(@Valid @RequestBody PostCityRequest dto, Authentication auth){
 
         List<City> allCreatedCity = cityService.findAllByUserId(auth.getName());
         boolean cityAlreadyExisted = allCreatedCity.stream().anyMatch(
                 c -> c.getCity().equalsIgnoreCase(dto.getCity())
         );
         if(cityAlreadyExisted){
-            return ResponseEntity.badRequest().body(new PostCityResponse("City already exists"));
+            throw new AlreadyExistedEntityException("City already existed");
         }
 
         City city = new City(dto.getCity(), "test.jpg", dto.getDescription());

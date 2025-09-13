@@ -1,15 +1,15 @@
 package com.smartcity.smart_city_information_system.exception;
 
-public class AlreadyExitedEntityException extends RuntimeException {
-    public AlreadyExitedEntityException(String message) {
+public class AlreadyExistedEntityException extends RuntimeException {
+    public AlreadyExistedEntityException(String message) {
         super(message);
     }
 
-    public AlreadyExitedEntityException(String message, Throwable cause) {
+    public AlreadyExistedEntityException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public AlreadyExitedEntityException(Throwable cause) {
+    public AlreadyExistedEntityException(Throwable cause) {
         super(cause);
     }
 }

@@ -28,7 +28,7 @@ export class CityListComponent implements OnInit {
         withCredentials: true,
       })
       .pipe(
-        delay(1000),
+        delay(300),
         map((response) => response.cities),
         catchError((error) => {
           console.log(error);

@@ -39,6 +39,10 @@ body {
   gap: 1.6rem;
 }
 
+.section__description{
+    font-weight: bold;
+}
+
 .main_section h1 {
   margin: 0;
 }

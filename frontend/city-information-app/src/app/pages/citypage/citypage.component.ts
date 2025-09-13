@@ -60,7 +60,8 @@ export class CityPageComponent implements OnInit{
       return;
     }
 
-    console.log(this.authService.loggedName());
+    // console.log(this.authService.loggedName());
+    console.log(this.enteredFile);
 
     if (!this.isFilledParams()) {
       this.httpClient
@@ -77,7 +78,7 @@ export class CityPageComponent implements OnInit{
         )
         .pipe(
           catchError((err: HttpErrorResponse) => {
-            this.errorMessage = err.error?.city || 'An unknown error occurred';
+            this.errorMessage = err.error?.message || 'An unknown error occurred';
             console.log(this.errorMessage);
 
             this.notificationService.show(

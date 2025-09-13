@@ -86,6 +86,17 @@ export class PlacePageComponent implements OnInit {
     console.log(this.enteredPlaceAvatar);
     console.log(this.enteredPlaceDescription);
 
+    if (
+      this.enteredSelectedCity === '' ||
+      this.enteredSelectedType === '' ||
+      this.enteredPlacename === '' ||
+      this.enteredPlaceAvatar === '' ||
+      this.enteredPlaceDescription === ''
+    ) {
+      this.notificationService.show('warning', 'All values should be filled!');
+      return;
+    }
+
     this.httpClient
       .post(
         'http://localhost:8080/api/place',

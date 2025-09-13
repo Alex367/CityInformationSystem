@@ -1,5 +1,7 @@
 <section class="section section_requestList">
   <h1>Request List</h1>
+  <p class="section__description">All your requests saved here</p>
+
   @if (isFetching()) {
   <p>Loading all requests... ⏳</p>
   } @else if(this.requestData()?.length === 0){
