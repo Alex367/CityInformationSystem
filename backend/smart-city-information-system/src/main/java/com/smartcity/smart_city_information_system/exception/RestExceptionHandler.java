@@ -1,5 +1,6 @@
 package com.smartcity.smart_city_information_system.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -36,6 +37,27 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleDatabaseOperation(DatabaseOperationException exc) {
+        ErrorResponse error = new ErrorResponse(
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            exc.getMessage(),
+            System.currentTimeMillis()
+        );
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleException(UnauthorizedException exc){
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.UNAUTHORIZED.value(),
+                exc.getMessage(),
+                System.currentTimeMillis()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<List<ErrorResponse>> handleValidationExceptions(MethodArgumentNotValidException exc){
         List<ErrorResponse> response = new ArrayList<>();
 
@@ -50,14 +72,27 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<List<ErrorResponse>> handleConstraintViolation(ConstraintViolationException exc) {
+        List<ErrorResponse> response = new ArrayList<>();
+        for (var violation : exc.getConstraintViolations()) {
+            response.add(new ErrorResponse(
+                    HttpStatus.BAD_REQUEST.value(),
+                    violation.getMessage(),
+                    System.currentTimeMillis()
+            ));
+        }
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleException(Exception exc){
         ErrorResponse error = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                exc.getMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "An unexpected error occurred",
                 System.currentTimeMillis()
         );
 
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 

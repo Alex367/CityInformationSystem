@@ -30,12 +30,11 @@ public class CityDAOImpl implements CityDAO{
 
     @Override
     public void addNewCity(City theCity) {
-        entityManager.merge(theCity);
+        entityManager.persist(theCity);
     }
 
     @Override
-    public String deleteCity(String id) {
-        City theCity = entityManager.find(City.class, id);
+    public String deleteCity(City theCity) {
         String cityName = theCity.getCity();
         entityManager.remove(theCity);
         return cityName;

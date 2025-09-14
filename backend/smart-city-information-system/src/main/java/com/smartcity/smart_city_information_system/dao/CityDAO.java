@@ -6,17 +6,10 @@ import java.util.List;
 
 public interface CityDAO {
     List<City> findAllCity();
-
     void addNewCity(City theCity);
-
-    String deleteCity(String id);
-
+    String deleteCity(City theCity);
     City findById(String id);
-
     List<City> findAllByUserId(String userId);
-
     City findByCityName(String cityName);
-
     City findByCityNameUserId(String userId, String cityName);
-
 }

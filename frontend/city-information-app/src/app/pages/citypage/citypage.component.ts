@@ -61,7 +61,7 @@ export class CityPageComponent implements OnInit{
     }
 
     // console.log(this.authService.loggedName());
-    console.log(this.enteredFile);
+    // console.log(this.enteredFile);
 
     if (!this.isFilledParams()) {
       this.httpClient

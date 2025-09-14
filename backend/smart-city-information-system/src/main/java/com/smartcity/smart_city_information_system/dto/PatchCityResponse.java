@@ -6,5 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class PatchCityResponse {
+    private int id;
     private String city;
 }
