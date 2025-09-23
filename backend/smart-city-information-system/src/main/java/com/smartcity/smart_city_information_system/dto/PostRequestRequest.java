@@ -1,6 +1,5 @@
 package com.smartcity.smart_city_information_system.dto;
 
-import com.smartcity.smart_city_information_system.enums.Status;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

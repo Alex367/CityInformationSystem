@@ -1,13 +1,7 @@
 package com.smartcity.smart_city_information_system.rest;
 
 import com.smartcity.smart_city_information_system.dto.*;
-import com.smartcity.smart_city_information_system.entity.Members;
-import com.smartcity.smart_city_information_system.entity.Request;
-import com.smartcity.smart_city_information_system.entity.Type;
-import com.smartcity.smart_city_information_system.enums.Status;
-import com.smartcity.smart_city_information_system.service.MembersService;
 import com.smartcity.smart_city_information_system.service.RequestService;
-import com.smartcity.smart_city_information_system.service.TypeService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,14 +21,10 @@ import java.util.Map;
 public class RequestController {
 
     private RequestService requestService;
-    private MembersService membersService;
-    private TypeService typeService;
 
     @Autowired
-    public RequestController(RequestService requestService, MembersService membersService, TypeService typeService) {
+    public RequestController(RequestService requestService) {
         this.requestService = requestService;
-        this.membersService = membersService;
-        this.typeService = typeService;
     }
 
     @PostMapping("/request")

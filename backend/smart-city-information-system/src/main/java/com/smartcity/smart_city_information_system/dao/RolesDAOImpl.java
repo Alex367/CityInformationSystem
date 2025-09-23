@@ -2,6 +2,7 @@ package com.smartcity.smart_city_information_system.dao;
 
 import com.smartcity.smart_city_information_system.entity.Members;
 import com.smartcity.smart_city_information_system.entity.Roles;
+import com.smartcity.smart_city_information_system.exception.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class RolesDAOImpl implements RolesDAO{
     public String deleteUser(String id) {
         int roleId = Integer.parseInt(id);
         Roles roles = entityManager.find(Roles.class, roleId);
+        if(roles == null){
+            throw new NotFoundException("role is not found");
+        }
         Members member = roles.getMember();
         String deletedUsername = member.getUser_id();
         entityManager.remove(member);

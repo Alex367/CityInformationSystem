@@ -1,15 +1,20 @@
 package com.smartcity.smart_city_information_system.service;
 
 import com.smartcity.smart_city_information_system.dao.RolesDAO;
+import com.smartcity.smart_city_information_system.dto.UserListResponse;
 import com.smartcity.smart_city_information_system.entity.Roles;
+import com.smartcity.smart_city_information_system.exception.DatabaseOperationException;
+import com.smartcity.smart_city_information_system.exception.UnauthorizedException;
+import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class RolesServiceImpl implements RolesService{
+public class RolesServiceImpl implements RolesService {
 
     private RolesDAO rolesDAO;
 
@@ -19,14 +24,34 @@ public class RolesServiceImpl implements RolesService{
     }
 
     @Override
-    public List<Roles> findAllUsers(String adminId) {
-        return rolesDAO.findAllUsers(adminId);
+    public List<UserListResponse> findAllUsers(Authentication auth) {
+
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        if (!isAdmin) {
+            throw new UnauthorizedException("You can not get user list.");
+        }
+
+        List<UserListResponse> allUsers = rolesDAO
+                .findAllUsers(auth.getName()).stream().map(UserListResponse::from).toList();
+        return allUsers;
     }
 
     @Override
     @Transactional
-    public String deleteUser(String userId) {
-        return rolesDAO.deleteUser(userId);
+    public String deleteUser(String userId, Authentication auth) {
+
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        if (!isAdmin) {
+            throw new UnauthorizedException("You can not get user list.");
+        }
+
+        try {
+            return rolesDAO.deleteUser(userId);
+        } catch (PersistenceException e) {
+            throw new DatabaseOperationException("Failed to delete a user due to db error", e);
+        }
     }
 
 }

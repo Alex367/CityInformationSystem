@@ -15,31 +15,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class RequestServiceImpl implements RequestService {
 
     private RequestDAO requestDAO;
-    private TypeService typeService;
+    private TypeDAO typeDAO;
     private MembersService membersService;
 
     @Autowired
     public RequestServiceImpl(RequestDAO requestDAO,
-                              TypeService typeService,
+                              TypeDAO typeDAO,
                               MembersService membersService) {
         this.requestDAO = requestDAO;
-        this.typeService = typeService;
+        this.typeDAO = typeDAO;
         this.membersService = membersService;
     }
 
     @Transactional
     @Override
     public void addNewRequest(PostRequestRequest dto, String userId) {
-        List<Type> allCreatedTypes = typeService.findAllTypes();
+        List<Type> allCreatedTypes = typeDAO.findAllTypes();
         boolean typeAlreadyExisted = allCreatedTypes.stream().anyMatch(
                 t -> t.getType().equalsIgnoreCase(dto.getType())
         );
@@ -111,7 +109,7 @@ public class RequestServiceImpl implements RequestService {
         if (dto.getStatus().equals(Status.ACCEPTED)) {
             Type theType = new Type(dto.getType(), "test.jpg", dto.getDescription());
             try {
-                typeService.addNewType(theType);
+                typeDAO.addNewType(theType);
             } catch (PersistenceException e) {
                 throw new DatabaseOperationException("Failed to add new type due to db error", e);
             }
@@ -131,6 +129,5 @@ public class RequestServiceImpl implements RequestService {
         } catch (PersistenceException e){
             throw new DatabaseOperationException("Failed to delete a request due to db error", e);
         }
-
     }
 }

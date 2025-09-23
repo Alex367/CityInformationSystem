@@ -1,6 +1,7 @@
 package com.smartcity.smart_city_information_system.dao;
 
 import com.smartcity.smart_city_information_system.entity.Type;
+import com.smartcity.smart_city_information_system.exception.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
@@ -33,13 +34,20 @@ public class TypeDAOImpl implements TypeDAO{
     @Override
     public String deleteType(String typeId) {
         Type foundType = entityManager.find(Type.class, typeId);
+        if(foundType == null){
+            throw new NotFoundException("type does not exist");
+        }
         entityManager.remove(foundType);
         return foundType.getType();
     }
 
     @Override
     public Type findById(String typeId) {
-        return entityManager.find(Type.class, typeId);
+        Type theType =  entityManager.find(Type.class, typeId);
+        if(theType == null){
+            throw new NotFoundException("type does not exist");
+        }
+        return theType;
     }
 
     @Override
