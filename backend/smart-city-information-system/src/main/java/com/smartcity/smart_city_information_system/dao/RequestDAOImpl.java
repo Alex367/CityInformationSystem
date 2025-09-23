@@ -1,6 +1,7 @@
 package com.smartcity.smart_city_information_system.dao;
 
 import com.smartcity.smart_city_information_system.entity.Request;
+import com.smartcity.smart_city_information_system.exception.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,8 @@ public class RequestDAOImpl implements RequestDAO{
     }
 
     @Override
-    public String addNewRequest(Request theRequest) {
-        String typenameRequest = theRequest.getType();
+    public void addNewRequest(Request theRequest) {
         entityManager.persist(theRequest);
-        return typenameRequest;
     }
 
     @Override
@@ -47,6 +46,9 @@ public class RequestDAOImpl implements RequestDAO{
     @Override
     public void deleteRequestById(String requestId) {
         Request theRequest = entityManager.find(Request.class, requestId);
+        if(theRequest == null){
+            throw new NotFoundException("request is not exist");
+        }
         entityManager.remove(theRequest);
     }
 }
