@@ -1,7 +1,6 @@
 package com.smartcity.smart_city_information_system.dao;
 
 import com.smartcity.smart_city_information_system.entity.Place;
-import com.smartcity.smart_city_information_system.entity.Type;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +39,30 @@ public class PlaceDAOImpl implements PlaceDAO{
     }
 
     @Override
-    public String deletePlace(String placeId) {
-        Place thePlace = entityManager.find(Place.class, placeId);
+    public String deletePlace(Place thePlace) {
         String placeName = thePlace.getPlace();
         entityManager.remove(thePlace);
         return placeName;
+    }
+
+    @Override
+    public boolean existsByPlaceAndCityAndType(String place, String city, String type, String userId) {
+        TypedQuery<Long> query = entityManager.createQuery(
+            "SELECT COUNT(p) FROM Place p " +
+            "WHERE LOWER(p.place) = LOWER(:place) " +
+            "AND LOWER(p.theCity.city) = LOWER(:city) " +
+            "AND LOWER(p.theType.type) = LOWER(:type)" +
+                    "AND p.theCity.members.user_id = :userId", Long.class);
+        query.setParameter("place", place);
+        query.setParameter("city", city);
+        query.setParameter("type", type);
+        query.setParameter("userId", userId);
+
+        return query.getSingleResult() > 0;
+    }
+
+    @Override
+    public Place findPlaceById(String placeId) {
+        return entityManager.find(Place.class, placeId);
     }
 }

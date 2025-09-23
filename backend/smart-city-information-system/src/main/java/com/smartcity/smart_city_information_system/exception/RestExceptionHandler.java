@@ -91,9 +91,7 @@ public class RestExceptionHandler {
                 "An unexpected error occurred",
                 System.currentTimeMillis()
         );
-
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 
 }

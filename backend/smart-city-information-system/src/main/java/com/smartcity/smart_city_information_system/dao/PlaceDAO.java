@@ -8,5 +8,7 @@ public interface PlaceDAO {
     List<Place> findAllPlaces();
     void addNewPlace(Place thePlace);
     List<Place> findAllPlacesByUserId(String userId);
-    String deletePlace(String placeId);
+    String deletePlace(Place thePlace);
+    boolean existsByPlaceAndCityAndType(String place, String city, String type, String userId);
+    Place findPlaceById(String placeId);
 }

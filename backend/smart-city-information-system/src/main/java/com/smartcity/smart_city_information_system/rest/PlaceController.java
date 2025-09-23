@@ -4,71 +4,49 @@ import com.smartcity.smart_city_information_system.dto.DeletePlaceResponse;
 import com.smartcity.smart_city_information_system.dto.GetAllPlacesResponse;
 import com.smartcity.smart_city_information_system.dto.PostPlaceRequest;
 import com.smartcity.smart_city_information_system.dto.PostPlaceResponse;
-import com.smartcity.smart_city_information_system.entity.City;
-import com.smartcity.smart_city_information_system.entity.Place;
-import com.smartcity.smart_city_information_system.entity.Type;
-import com.smartcity.smart_city_information_system.service.CityService;
 import com.smartcity.smart_city_information_system.service.PlaceService;
-import com.smartcity.smart_city_information_system.service.TypeService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
+@Validated
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = {"http://localhost:4200"})
 public class PlaceController {
 
     private PlaceService placeService;
-    private CityService cityService;
-    private TypeService typeService;
 
     @Autowired
-    public PlaceController(PlaceService placeService, CityService cityService, TypeService typeService) {
+    public PlaceController(PlaceService placeService) {
         this.placeService = placeService;
-        this.cityService = cityService;
-        this.typeService = typeService;
     }
 
     @PostMapping("/place")
-    public ResponseEntity<PostPlaceResponse> createPlace(@RequestBody PostPlaceRequest dto, Authentication auth){
-        Place thePlace = new Place(dto.getPlace(), "test.jpg", dto.getDescription());
-
-        City theCity = cityService.findByCityNameUserId(auth.getName(), dto.getCity());
-        Type theType = typeService.findByTypeName(dto.getType());
-
-        List<Place> allCreatedPlaces = placeService.findAllPlaces();
-        boolean placeAlreadyExisted = allCreatedPlaces.stream().anyMatch(
-                p -> p.getPlace().equalsIgnoreCase(dto.getPlace()) &&
-                        p.getTheCity().getCity().equalsIgnoreCase(dto.getCity()) &&
-                        p.getTheType().getType().equalsIgnoreCase(dto.getType())
-        );
-        if(placeAlreadyExisted){
-            return ResponseEntity.badRequest().body(new PostPlaceResponse("Place already exists"));
-        }
-
-        thePlace.setTheCity(theCity);
-        thePlace.setTheType(theType);
-        placeService.addNewPlace(thePlace);
-
-        return ResponseEntity.ok(new PostPlaceResponse("created!"));
+    public ResponseEntity<PostPlaceResponse> createPlace(@Valid @RequestBody PostPlaceRequest dto,
+                                                         Authentication auth){
+        placeService.addNewPlace(dto, auth.getName());
+        return ResponseEntity.ok(new PostPlaceResponse("place is created successfully."));
     }
 
     @GetMapping("/placeList")
-    public Map<String, List<GetAllPlacesResponse>> getPlaces(Authentication auth){
-        List<GetAllPlacesResponse> places = placeService.findAllPlacesByUserId(auth.getName())
-                .stream().map(GetAllPlacesResponse::from).toList();
-
-        return Map.of("places", places);
+    public ResponseEntity<Map<String, List<GetAllPlacesResponse>>> getPlaces(Authentication auth){
+        List<GetAllPlacesResponse> places = placeService.findAllPlacesByUserId(auth.getName());
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("places", places));
     }
 
     @DeleteMapping("/placeList/{placeId}")
-    public ResponseEntity<DeletePlaceResponse> deletePlace(@PathVariable String placeId){
-        String removedPlace = placeService.deletePlace(placeId);
+    public ResponseEntity<DeletePlaceResponse> deletePlace(@PathVariable @Pattern(regexp = "\\d+") String placeId,
+                                                           Authentication auth){
+        String removedPlace = placeService.deletePlace(placeId, auth.getName());
         return ResponseEntity.ok(new DeletePlaceResponse(removedPlace));
     }
 

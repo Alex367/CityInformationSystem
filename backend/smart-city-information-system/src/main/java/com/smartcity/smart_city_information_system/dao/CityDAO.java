@@ -11,5 +11,5 @@ public interface CityDAO {
     City findById(String id);
     List<City> findAllByUserId(String userId);
     City findByCityName(String cityName);
-    City findByCityNameUserId(String userId, String cityName);
+    City findCityIdByUserCityName(String cityName, String userId);
 }

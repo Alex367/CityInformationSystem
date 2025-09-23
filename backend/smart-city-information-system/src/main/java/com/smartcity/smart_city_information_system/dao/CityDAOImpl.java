@@ -2,6 +2,7 @@ package com.smartcity.smart_city_information_system.dao;
 
 import com.smartcity.smart_city_information_system.entity.City;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -54,20 +55,24 @@ public class CityDAOImpl implements CityDAO{
 
     @Override
     public City findByCityName(String cityName) {
-        return entityManager.createQuery(
+        try{
+            return entityManager.createQuery(
                 "select c from City c where c.city = :cityName", City.class
-        ).setParameter("cityName", cityName).getSingleResult();
+            ).setParameter("cityName", cityName).getSingleResult();
+        } catch (NoResultException e){
+            return null;
+        }
     }
 
     @Override
-    public City findByCityNameUserId(String userId, String cityName) {
-        TypedQuery<City> theCity = entityManager.createQuery(
+    public City findCityIdByUserCityName(String cityName, String userId) {
+        try{
+            return entityManager.createQuery(
                 "select c from City c where c.city = :cityName and c.members.user_id = :userId", City.class
-        );
-        theCity.setParameter("cityName", cityName);
-        theCity.setParameter("userId", userId);
-
-        return theCity.getSingleResult();
+            ).setParameter("cityName", cityName).setParameter("userId", userId).getSingleResult();
+        } catch (NoResultException e){
+            return null;
+        }
     }
 
 }

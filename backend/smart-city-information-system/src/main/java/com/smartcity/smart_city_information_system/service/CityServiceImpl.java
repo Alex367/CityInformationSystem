@@ -125,7 +125,7 @@ public class CityServiceImpl implements CityService{
     }
 
     @Override
-    public City findByCityNameUserId(String userId, String cityName) {
-        return cityDAO.findByCityNameUserId(userId, cityName);
+    public City findCityIdByUserCityName(String cityName, String userId) {
+        return cityDAO.findCityIdByUserCityName(cityName, userId);
     }
 }

@@ -2,6 +2,7 @@ package com.smartcity.smart_city_information_system.dao;
 
 import com.smartcity.smart_city_information_system.entity.Type;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -43,7 +44,11 @@ public class TypeDAOImpl implements TypeDAO{
 
     @Override
     public Type findByTypeName(String typeName) {
-        return entityManager.createQuery("select t from Type t where t.type = :typeName", Type.class
-        ).setParameter("typeName", typeName).getSingleResult();
+        try {
+            return entityManager.createQuery("select t from Type t where t.type = :typeName", Type.class
+            ).setParameter("typeName", typeName).getSingleResult();
+        } catch (NoResultException e){
+            return null;
+        }
     }
 }
