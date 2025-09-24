@@ -1,10 +1,16 @@
 package com.smartcity.smart_city_information_system.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
+@ToString
 @Entity
 @Table(name = "typeTable")
 public class Type {
@@ -34,46 +40,6 @@ public class Type {
         this.description = description;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getPath_file() {
-        return path_file;
-    }
-
-    public void setPath_file(String path_file) {
-        this.path_file = path_file;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<Place> getPlaces() {
-        return places;
-    }
-
-    public void setPlaces(List<Place> places) {
-        this.places = places;
-    }
-
     public void add(Place tempPlace){
         if(places == null){
             places = new ArrayList<>();
@@ -83,14 +49,4 @@ public class Type {
         tempPlace.setTheType(this);
     }
 
-    @Override
-    public String toString() {
-        return "Type{" +
-                "id=" + id +
-                ", type='" + type + '\'' +
-                ", path_file='" + path_file + '\'' +
-                ", description='" + description + '\'' +
-                ", places=" + places +
-                '}';
-    }
 }

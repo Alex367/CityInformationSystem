@@ -1,10 +1,16 @@
 package com.smartcity.smart_city_information_system.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
+@ToString
 @Entity
 @Table(name = "city")
 public class City {
@@ -35,54 +41,6 @@ public class City {
         this.description = description;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getPath_file() {
-        return path_file;
-    }
-
-    public void setPath_file(String path_file) {
-        this.path_file = path_file;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Members getMembers() {
-        return members;
-    }
-
-    public void setMembers(Members members) {
-        this.members = members;
-    }
-
-    public List<Place> getPlaces() {
-        return places;
-    }
-
-    public void setPlaces(List<Place> places) {
-        this.places = places;
-    }
-
     public void add(Place tempPlace){
         if(places == null){
             places = new ArrayList<>();
@@ -92,15 +50,4 @@ public class City {
         tempPlace.setTheCity(this);
     }
 
-    @Override
-    public String toString() {
-        return "City{" +
-                "id=" + id +
-                ", city='" + city + '\'' +
-                ", path_file='" + path_file + '\'' +
-                ", description='" + description + '\'' +
-                ", members=" + members +
-                ", places=" + places +
-                '}';
-    }
 }

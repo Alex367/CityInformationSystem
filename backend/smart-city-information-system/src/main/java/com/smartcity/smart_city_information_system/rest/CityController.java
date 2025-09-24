@@ -36,7 +36,7 @@ public class CityController {
     }
 
     @PatchMapping("/city")
-    public ResponseEntity<PatchCityResponse> patchCity(@RequestBody PatchCityRequest dto){
+    public ResponseEntity<PatchCityResponse> patchCity(@Valid @RequestBody PatchCityRequest dto){
         City patchedCity = cityService.patchCity(dto);
         return ResponseEntity.ok(new PatchCityResponse(patchedCity.getId(), patchedCity.getCity()));
     }

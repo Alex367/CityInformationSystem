@@ -1,7 +1,7 @@
 package com.smartcity.smart_city_information_system.rest;
 
-import com.smartcity.smart_city_information_system.dto.RegistrationRequest;
-import com.smartcity.smart_city_information_system.dto.RegistrationResponse;
+import com.smartcity.smart_city_information_system.dto.PostRegistrationRequest;
+import com.smartcity.smart_city_information_system.dto.PostRegistrationResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,10 +43,10 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<RegistrationResponse> registerUser(@Valid @RequestBody RegistrationRequest req){
+    public ResponseEntity<PostRegistrationResponse> registerUser(@Valid @RequestBody PostRegistrationRequest req){
 
         if(userDetailsManager.userExists(req.getUser_id())){
-            return ResponseEntity.badRequest().body(new RegistrationResponse("User already exists",
+            return ResponseEntity.badRequest().body(new PostRegistrationResponse("User already exists",
                     req.getUser_id()));
         }
 
@@ -60,7 +60,7 @@ public class AuthController {
 
         userDetailsManager.createUser(user);
 
-        return ResponseEntity.ok(new RegistrationResponse("User registered successfully.",
+        return ResponseEntity.ok(new PostRegistrationResponse("User registered successfully.",
                 req.getUser_id()));
 
     }

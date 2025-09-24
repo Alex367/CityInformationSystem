@@ -1,10 +1,7 @@
 package com.smartcity.smart_city_information_system.dto;
 
 import com.smartcity.smart_city_information_system.enums.Status;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PatchRequestRequest {
     @Positive
+    @NotNull
     private int id;
 
     @NotBlank(message = "Response can not be null or empty")

@@ -1,11 +1,17 @@
 package com.smartcity.smart_city_information_system.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
 @Entity
+@ToString
 @Table(name = "members")
 public class Members {
 
@@ -37,54 +43,6 @@ public class Members {
         this.user_id = user_id;
     }
 
-    public List<Request> getRequests() {
-        return requests;
-    }
-
-    public void setRequests(List<Request> requests) {
-        this.requests = requests;
-    }
-
-    public Roles getRole() {
-        return role;
-    }
-
-    public void setRole(Roles role) {
-        this.role = role;
-    }
-
-    public String getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
-    }
-
-    public String getPw() {
-        return pw;
-    }
-
-    public void setPw(String pw) {
-        this.pw = pw;
-    }
-
-    public String getActive() {
-        return active;
-    }
-
-    public void setActive(String active) {
-        this.active = active;
-    }
-
-    public List<City> getCities() {
-        return cities;
-    }
-
-    public void setCities(List<City> cities) {
-        this.cities = cities;
-    }
-
     public void add(City tempCity){
         if(cities == null){
             cities = new ArrayList<>();
@@ -94,15 +52,4 @@ public class Members {
         tempCity.setMembers(this);
     }
 
-    @Override
-    public String toString() {
-        return "Members{" +
-                "user_id='" + user_id + '\'' +
-                ", pw='" + pw + '\'' +
-                ", active='" + active + '\'' +
-                ", cities=" + cities +
-                ", role=" + role +
-                ", requests=" + requests +
-                '}';
-    }
 }

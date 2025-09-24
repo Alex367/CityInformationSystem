@@ -1,8 +1,7 @@
 package com.smartcity.smart_city_information_system.service;
 
 import com.smartcity.smart_city_information_system.dao.RolesDAO;
-import com.smartcity.smart_city_information_system.dto.UserListResponse;
-import com.smartcity.smart_city_information_system.entity.Roles;
+import com.smartcity.smart_city_information_system.dto.GetUserListResponse;
 import com.smartcity.smart_city_information_system.exception.DatabaseOperationException;
 import com.smartcity.smart_city_information_system.exception.UnauthorizedException;
 import jakarta.persistence.PersistenceException;
@@ -24,7 +23,7 @@ public class RolesServiceImpl implements RolesService {
     }
 
     @Override
-    public List<UserListResponse> findAllUsers(Authentication auth) {
+    public List<GetUserListResponse> findAllUsers(Authentication auth) {
 
         boolean isAdmin = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
@@ -32,8 +31,8 @@ public class RolesServiceImpl implements RolesService {
             throw new UnauthorizedException("You can not get user list.");
         }
 
-        List<UserListResponse> allUsers = rolesDAO
-                .findAllUsers(auth.getName()).stream().map(UserListResponse::from).toList();
+        List<GetUserListResponse> allUsers = rolesDAO
+                .findAllUsers(auth.getName()).stream().map(GetUserListResponse::from).toList();
         return allUsers;
     }
 

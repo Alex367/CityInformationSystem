@@ -10,6 +10,7 @@ import com.smartcity.smart_city_information_system.exception.AlreadyExistedEntit
 import com.smartcity.smart_city_information_system.exception.DatabaseOperationException;
 import com.smartcity.smart_city_information_system.exception.NotFoundException;
 import com.smartcity.smart_city_information_system.exception.UnauthorizedException;
+import com.smartcity.smart_city_information_system.mapstruct.CityMapper;
 import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,13 @@ public class CityServiceImpl implements CityService{
 
     private CityDAO cityDAO;
     private MembersService membersService;
+    private CityMapper cityMapper;
 
     @Autowired
-    public CityServiceImpl(CityDAO cityDAO, MembersService membersService) {
+    public CityServiceImpl(CityDAO cityDAO, MembersService membersService, CityMapper cityMapper) {
         this.cityDAO = cityDAO;
         this.membersService = membersService;
+        this.cityMapper = cityMapper;
     }
 
     @Override
@@ -87,9 +90,8 @@ public class CityServiceImpl implements CityService{
     @Override
     public List<GetAllCitiesResponse> findAllByUserId(String userId) {
         try{
-            return cityDAO.findAllByUserId(userId).stream()
-                .map(GetAllCitiesResponse::from)
-                .toList();
+            List<City> cities = cityDAO.findAllByUserId(userId);
+            return cityMapper.toGetAllCitiesResponseList(cities);
         }catch (PersistenceException e){
             throw new DatabaseOperationException("Failed to retrieve cities for user "
                     + userId
@@ -100,6 +102,7 @@ public class CityServiceImpl implements CityService{
     @Override
     @Transactional
     public City patchCity(PatchCityRequest dto) {
+        dto.setPath_file("test.jpg");
         City city = cityDAO.findById(dto.getId());
         if(city == null){
             throw new NotFoundException("City with the name " + dto.getCity() + " not found");
@@ -112,9 +115,7 @@ public class CityServiceImpl implements CityService{
             throw new AlreadyExistedEntityException("No changes detected");
         }
 
-        city.setCity(dto.getCity());
-        city.setDescription(dto.getDescription());
-        city.setPath_file("test.jpg");
+        cityMapper.updateCityFromPatchRequest(dto, city);
 
         return city;
     }

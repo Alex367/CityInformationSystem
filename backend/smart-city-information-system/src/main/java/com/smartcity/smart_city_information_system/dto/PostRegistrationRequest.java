@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class RegistrationRequest {
+public class PostRegistrationRequest {
     @NotBlank(message = "User id can not be null or empty")
     @Size(min = 1, max = 50, message = "User id must be between 1 and 50 characters")
     private String user_id;

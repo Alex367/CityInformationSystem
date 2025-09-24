@@ -1,7 +1,13 @@
 package com.smartcity.smart_city_information_system.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+@Setter
+@Getter
+@ToString
 @Entity
 @Table(name = "place")
 public class Place {
@@ -36,63 +42,4 @@ public class Place {
         this.description = description;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getPlace() {
-        return place;
-    }
-
-    public void setPlace(String place) {
-        this.place = place;
-    }
-
-    public String getPath_file() {
-        return path_file;
-    }
-
-    public void setPath_file(String path_file) {
-        this.path_file = path_file;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public City getTheCity() {
-        return theCity;
-    }
-
-    public void setTheCity(City theCity) {
-        this.theCity = theCity;
-    }
-
-    public Type getTheType() {
-        return theType;
-    }
-
-    public void setTheType(Type theType) {
-        this.theType = theType;
-    }
-
-    @Override
-    public String toString() {
-        return "Place{" +
-                "id=" + id +
-                ", place='" + place + '\'' +
-                ", path_file='" + path_file + '\'' +
-                ", description='" + description + '\'' +
-                ", theCity=" + theCity +
-                ", theType=" + theType +
-                '}';
-    }
 }

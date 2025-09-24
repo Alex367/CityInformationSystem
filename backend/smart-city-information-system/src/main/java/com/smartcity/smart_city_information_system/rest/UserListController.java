@@ -1,7 +1,7 @@
 package com.smartcity.smart_city_information_system.rest;
 
 import com.smartcity.smart_city_information_system.dto.DeleteUserResponse;
-import com.smartcity.smart_city_information_system.dto.UserListResponse;
+import com.smartcity.smart_city_information_system.dto.GetUserListResponse;
 import com.smartcity.smart_city_information_system.service.RolesService;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +28,8 @@ public class UserListController {
     }
 
     @GetMapping("/userList")
-    public ResponseEntity<Map<String, List<UserListResponse>>> getUsers(Authentication auth) {
-        List<UserListResponse> allUsers = rolesService.findAllUsers(auth);
+    public ResponseEntity<Map<String, List<GetUserListResponse>>> getUsers(Authentication auth) {
+        List<GetUserListResponse> allUsers = rolesService.findAllUsers(auth);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("users", allUsers));
     }
 
