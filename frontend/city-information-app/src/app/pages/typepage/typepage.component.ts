@@ -98,7 +98,8 @@ export class TypePageComponent implements OnInit, OnDestroy {
         .pipe(
           catchError((err: HttpErrorResponse) => {
             this.errorMessage =
-              err.error?.message || 'An unknown error occurred';
+              err.error[0]?.message || 'An unknown error occurred';
+
             console.log(this.errorMessage);
 
             this.notificationService.show(
@@ -140,7 +141,8 @@ export class TypePageComponent implements OnInit, OnDestroy {
         .pipe(
           catchError((err: HttpErrorResponse) => {
             this.errorMessage =
-              err.error?.typename || 'An unknown error occurred';
+              err.error[0]?.message || 'An unknown error occurred';
+
             console.log(this.errorMessage);
 
             this.notificationService.show(
@@ -189,7 +191,8 @@ export class TypePageComponent implements OnInit, OnDestroy {
       )
       .pipe(
         catchError((err: HttpErrorResponse) => {
-          this.errorMessage = err.error?.message || 'An unknown error occurred';
+          this.errorMessage =
+            err.error[0]?.message || 'An unknown error occurred';
           console.log(this.errorMessage);
 
           this.notificationService.show(
@@ -228,8 +231,11 @@ export class TypePageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if(this.enteredStatus == "PENDING"){
-      this.notificationService.show('warning', 'Set status to ACCEPT or REJECT');
+    if (this.enteredStatus == 'PENDING') {
+      this.notificationService.show(
+        'warning',
+        'Set status to ACCEPT or REJECT'
+      );
       return;
     }
 
@@ -253,7 +259,8 @@ export class TypePageComponent implements OnInit, OnDestroy {
       .pipe(
         catchError((err: HttpErrorResponse) => {
           this.errorMessage =
-            err.error?.typename || 'An unknown error occurred';
+            err.error[0]?.message || 'An unknown error occurred';
+
           console.log(this.errorMessage);
 
           this.notificationService.show(
@@ -270,10 +277,7 @@ export class TypePageComponent implements OnInit, OnDestroy {
         next: (resData) => {
           console.log(resData);
           this.errorMessage = null;
-          this.notificationService.show(
-            'success',
-            'Responded!'
-          );
+          this.notificationService.show('success', 'Responded!');
           this.isFilledParams.set(false);
           this.router.navigate(['/requestList']);
         },

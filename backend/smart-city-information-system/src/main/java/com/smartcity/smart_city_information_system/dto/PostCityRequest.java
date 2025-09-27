@@ -20,6 +20,5 @@ public class PostCityRequest {
 
     @NotBlank(message = "Description can not be null or empty")
     @Size(min = 1, max = 45, message = "Description must be between 2 and 45 characters")
-    @Pattern(regexp = "^[a-zA-Z\\s-']+$", message = "Description must contain only letters, spaces, hyphens, or apostrophes")
     private String description;
 }

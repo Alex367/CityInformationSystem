@@ -15,46 +15,55 @@ import java.util.List;
 public class RestExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException(NotFoundException exc){
+    public ResponseEntity<List<ErrorResponse>> handleException(NotFoundException exc){
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 exc.getMessage(),
                 System.currentTimeMillis()
         );
 
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        List<ErrorResponse> errors = List.of(error);
+
+        return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException(AlreadyExistedEntityException exc){
+    public ResponseEntity<List<ErrorResponse>> handleException(AlreadyExistedEntityException exc){
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.CONFLICT.value(),
                 exc.getMessage(),
                 System.currentTimeMillis()
         );
 
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+        List<ErrorResponse> errors = List.of(error);
+
+        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleDatabaseOperation(DatabaseOperationException exc) {
+    public ResponseEntity<List<ErrorResponse>> handleDatabaseOperation(DatabaseOperationException exc) {
         ErrorResponse error = new ErrorResponse(
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
             exc.getMessage(),
             System.currentTimeMillis()
         );
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        List<ErrorResponse> errors = List.of(error);
+
+        return new ResponseEntity<>(errors, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException(UnauthorizedException exc){
+    public ResponseEntity<List<ErrorResponse>> handleException(UnauthorizedException exc){
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.UNAUTHORIZED.value(),
                 exc.getMessage(),
                 System.currentTimeMillis()
         );
 
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        List<ErrorResponse> errors = List.of(error);
+
+        return new ResponseEntity<>(errors, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler
@@ -85,23 +94,29 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException(InvalidInputException exc) {
+    public ResponseEntity<List<ErrorResponse>> handleException(InvalidInputException exc) {
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 exc.getMessage(),
                 System.currentTimeMillis()
         );
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+
+        List<ErrorResponse> errors = List.of(error);
+
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException(Exception exc){
+    public ResponseEntity<List<ErrorResponse>> handleException(Exception exc){
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "An unexpected error occurred",
                 System.currentTimeMillis()
         );
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        List<ErrorResponse> errors = List.of(error);
+
+        return new ResponseEntity<>(errors, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

@@ -8,14 +8,5 @@ public record GetAllPlacesResponse(int id,
                                    String description,
                                    String city,
                                    String type) {
-    public static GetAllPlacesResponse from(Place place){
-        return new GetAllPlacesResponse(
-                place.getId(),
-                place.getPlace(),
-                place.getPath_file(),
-                place.getDescription(),
-                place.getTheCity().getCity(),
-                place.getTheType().getType()
-        );
-    }
+
 }

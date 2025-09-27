@@ -78,7 +78,7 @@ export class CityPageComponent implements OnInit{
         )
         .pipe(
           catchError((err: HttpErrorResponse) => {
-            this.errorMessage = err.error?.message || 'An unknown error occurred';
+            this.errorMessage = err.error[0]?.message || 'An unknown error occurred';
             console.log(this.errorMessage);
 
             this.notificationService.show(
@@ -118,7 +118,7 @@ export class CityPageComponent implements OnInit{
         )
         .pipe(
           catchError((err: HttpErrorResponse) => {
-            this.errorMessage = err.error?.message || 'An unknown error occurred';
+            this.errorMessage = err.error[0]?.message || 'An unknown error occurred';
             console.log(this.errorMessage);
 
             this.notificationService.show(

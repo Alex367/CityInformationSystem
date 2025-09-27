@@ -10,6 +10,7 @@ import com.smartcity.smart_city_information_system.entity.Request;
 import com.smartcity.smart_city_information_system.entity.Type;
 import com.smartcity.smart_city_information_system.enums.Status;
 import com.smartcity.smart_city_information_system.exception.*;
+import com.smartcity.smart_city_information_system.mapstruct.RequestMapper;
 import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -24,14 +25,17 @@ public class RequestServiceImpl implements RequestService {
     private RequestDAO requestDAO;
     private TypeDAO typeDAO;
     private MembersService membersService;
+    private RequestMapper requestMapper;
 
     @Autowired
     public RequestServiceImpl(RequestDAO requestDAO,
                               TypeDAO typeDAO,
-                              MembersService membersService) {
+                              MembersService membersService,
+                              RequestMapper requestMapper) {
         this.requestDAO = requestDAO;
         this.typeDAO = typeDAO;
         this.membersService = membersService;
+        this.requestMapper = requestMapper;
     }
 
     @Transactional
@@ -68,16 +72,14 @@ public class RequestServiceImpl implements RequestService {
         boolean isAdmin = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
-        List<GetAllRequestsResponse> theRequests;
+        List<Request> theRequests;
         try {
             if (!isAdmin) {
-                theRequests = requestDAO.findAllRequestsByUser(auth.getName())
-                        .stream().map(GetAllRequestsResponse::from).toList();
+                theRequests = requestDAO.findAllRequestsByUser(auth.getName());
             } else {
-                theRequests = requestDAO.findAllRequests()
-                        .stream().map(GetAllRequestsResponse::from).toList();
+                theRequests = requestDAO.findAllRequests();
             }
-            return theRequests;
+            return requestMapper.toGetAllRequestsResponseList(theRequests);
         } catch (PersistenceException e) {
             throw new DatabaseOperationException("Failed to find requests due to db error", e);
         }
@@ -100,11 +102,7 @@ public class RequestServiceImpl implements RequestService {
             throw new NotFoundException("request with the id " + dto.getId() + " is not found");
         }
 
-        theRequest.setResponse(dto.getResponse());
-        theRequest.setType(dto.getType());
-        theRequest.setPath_file(dto.getPath_file());
-        theRequest.setDescription(dto.getDescription());
-        theRequest.setStatus(dto.getStatus());
+        requestMapper.updateRequestFromPatchRequest(dto, theRequest);
 
         if (dto.getStatus().equals(Status.ACCEPTED)) {
             Type theType = new Type(dto.getType(), "test.jpg", dto.getDescription());

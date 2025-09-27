@@ -2,8 +2,10 @@ package com.smartcity.smart_city_information_system.service;
 
 import com.smartcity.smart_city_information_system.dao.RolesDAO;
 import com.smartcity.smart_city_information_system.dto.GetUserListResponse;
+import com.smartcity.smart_city_information_system.entity.Roles;
 import com.smartcity.smart_city_information_system.exception.DatabaseOperationException;
 import com.smartcity.smart_city_information_system.exception.UnauthorizedException;
+import com.smartcity.smart_city_information_system.mapstruct.UserMapper;
 import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,12 @@ import java.util.List;
 public class RolesServiceImpl implements RolesService {
 
     private RolesDAO rolesDAO;
+    private UserMapper userMapper;
 
     @Autowired
-    public RolesServiceImpl(RolesDAO rolesDAO) {
+    public RolesServiceImpl(RolesDAO rolesDAO, UserMapper userMapper) {
         this.rolesDAO = rolesDAO;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -31,9 +35,8 @@ public class RolesServiceImpl implements RolesService {
             throw new UnauthorizedException("You can not get user list.");
         }
 
-        List<GetUserListResponse> allUsers = rolesDAO
-                .findAllUsers(auth.getName()).stream().map(GetUserListResponse::from).toList();
-        return allUsers;
+        List<Roles> allUsers = rolesDAO.findAllUsers(auth.getName());
+        return userMapper.toGetUserListResponseList(allUsers);
     }
 
     @Override

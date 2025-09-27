@@ -8,6 +8,7 @@ import com.smartcity.smart_city_information_system.entity.Type;
 import com.smartcity.smart_city_information_system.exception.AlreadyExistedEntityException;
 import com.smartcity.smart_city_information_system.exception.DatabaseOperationException;
 import com.smartcity.smart_city_information_system.exception.UnauthorizedException;
+import com.smartcity.smart_city_information_system.mapstruct.TypeMapper;
 import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -20,10 +21,12 @@ import java.util.List;
 public class TypeServiceImpl implements TypeService {
 
     private TypeDAO typeDAO;
+    private TypeMapper typeMapper;
 
     @Autowired
-    public TypeServiceImpl(TypeDAO typeDAO) {
+    public TypeServiceImpl(TypeDAO typeDAO, TypeMapper typeMapper) {
         this.typeDAO = typeDAO;
+        this.typeMapper = typeMapper;
     }
 
     @Override
@@ -57,10 +60,8 @@ public class TypeServiceImpl implements TypeService {
 
     @Override
     public List<GetAllTypesResponse> findAllTypes() {
-        List<GetAllTypesResponse> allTypes = typeDAO.findAllTypes()
-                .stream().map(GetAllTypesResponse::from)
-                .toList();
-        return allTypes;
+        List<Type> allTypes = typeDAO.findAllTypes();
+        return typeMapper.toGetAllTypesResponseList(allTypes);
     }
 
     @Transactional
@@ -102,9 +103,7 @@ public class TypeServiceImpl implements TypeService {
             throw new AlreadyExistedEntityException("No changes detected.");
         }
 
-        type.setType(dto.getType());
-        type.setDescription(dto.getDescription());
-        type.setPath_file("test.jpg");
+        typeMapper.updateTypeFromPatchRequest(dto, type);
 
         return type;
     }

@@ -10,6 +10,7 @@ import com.smartcity.smart_city_information_system.exception.AlreadyExistedEntit
 import com.smartcity.smart_city_information_system.exception.DatabaseOperationException;
 import com.smartcity.smart_city_information_system.exception.NotFoundException;
 import com.smartcity.smart_city_information_system.exception.UnauthorizedException;
+import com.smartcity.smart_city_information_system.mapstruct.PlaceMapper;
 import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,14 +23,17 @@ public class PlaceServiceImpl implements PlaceService{
     private PlaceDAO placeDAO;
     private CityService cityService;
     private TypeService typeService;
+    private PlaceMapper placeMapper;
 
     @Autowired
     public PlaceServiceImpl(PlaceDAO placeDAO,
                             CityService cityService,
-                            TypeService typeService) {
+                            TypeService typeService,
+                            PlaceMapper placeMapper) {
         this.placeDAO = placeDAO;
         this.cityService = cityService;
         this.typeService = typeService;
+        this.placeMapper = placeMapper;
     }
 
     @Override
@@ -76,8 +80,8 @@ public class PlaceServiceImpl implements PlaceService{
     @Override
     public List<GetAllPlacesResponse> findAllPlacesByUserId(String userId) {
         try {
-            return placeDAO.findAllPlacesByUserId(userId)
-                    .stream().map(GetAllPlacesResponse::from).toList();
+            List<Place> allPlaces = placeDAO.findAllPlacesByUserId(userId);
+            return placeMapper.toGetAllPlacesResponseList(allPlaces);
         } catch (PersistenceException e){
             throw new DatabaseOperationException("Failed to retrieve places for user "
                     + userId
