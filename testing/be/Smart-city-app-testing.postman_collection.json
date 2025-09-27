@@ -1,0 +1,471 @@
+{
+	"info": {
+		"_postman_id": "397ff3a5-734e-48e7-b75d-22064b3cae7e",
+		"name": "Smart-city-app-testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25779440"
+	},
+	"item": [
+		{
+			"name": "login admin",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "mary",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "pass",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "city, empty city",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response structure, characters\", function () {",
+							"    pm.expect(responseData[0]).to.have.property('status');",
+							"    pm.expect(responseData[0]).to.have.property('message');",
+							"    pm.expect(responseData[0]).to.have.property('timeStamp');",
+							"",
+							"    let arr = [",
+							"        \"City must be between 2 and 45 characters\",",
+							"        \"City can not be null or empty\", ",
+							"        \"City must contain only letters, spaces, hyphens, or apostrophes\"];",
+							"",
+							"    pm.expect(responseData[0].message).to.contain.oneOf(arr);",
+							"",
+							"});",
+							"",
+							"pm.test(\"Response structure, letters\", function () {",
+							"    pm.expect(responseData[1]).to.have.property('status');",
+							"    pm.expect(responseData[1]).to.have.property('message');",
+							"    pm.expect(responseData[1]).to.have.property('timeStamp');",
+							"});",
+							"",
+							"pm.test(\"Response structure, empty\", function () {",
+							"    pm.expect(responseData[2]).to.have.property('status');",
+							"    pm.expect(responseData[2]).to.have.property('message');",
+							"    pm.expect(responseData[2]).to.have.property('timeStamp');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "8666CF8CD1DC36716F2BCF79D0838036",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"city\": \"\",\n    \"path_file\": \"test.jpg\",\n    \"description\": \"text\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/city",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"city"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "city list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response structure\", function () {",
+							"    pm.expect(responseData).to.have.property('cities');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "E32F52D1E89434E7A3A36CA2409800DC",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/cityList",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"cityList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response structure\", function () {",
+							"    pm.expect(responseData).to.have.property('users');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/userList",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"userList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "place list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response structure\", function () {",
+							"    pm.expect(responseData).to.have.property('places');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "CED89BD7AADEDA8B41FC5E81B951CEBA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/placeList",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"placeList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "request list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response structure\", function () {",
+							"    pm.expect(responseData).to.have.property('requestList');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "CC7A77230CD8E6DAF567AB959299580E",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/requestList",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"requestList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "type list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response structure\", function () {",
+							"    pm.expect(responseData).to.have.property('types');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "81A9B0BB112C237C3C2F196AE7376262",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/typeList",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"typeList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "city list, invlid id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response structure, characters\", function () {",
+							"    pm.expect(responseData[0]).to.have.property('status');",
+							"    pm.expect(responseData[0]).to.have.property('message');",
+							"    pm.expect(responseData[0]).to.have.property('timeStamp');",
+							"",
+							"    pm.expect(responseData[0].message).to.eql('must match \\\"\\\\d+\\\"');",
+							"    pm.expect(responseData[0].status).to.eql(400);",
+							"",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "F44DD35164B07145D8776E1D449D2239",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/cityList/example",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"cityList",
+						"example"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "city, missing city",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response structure, characters\", function () {",
+							"    pm.expect(responseData[0]).to.have.property('status');",
+							"    pm.expect(responseData[0]).to.have.property('message');",
+							"    pm.expect(responseData[0]).to.have.property('timeStamp');",
+							"",
+							"    pm.expect(responseData[0].message).to.eql('City can not be null or empty');",
+							"    pm.expect(responseData[0].status).to.eql(400);",
+							"",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "JSESSIONID",
+						"value": "D2985A7AE0F23F128A2B0126F98B4C9A",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"27\",\n    \"path_file\": \"test.jpg\",\n    \"description\": \"text\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/city",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"city"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
