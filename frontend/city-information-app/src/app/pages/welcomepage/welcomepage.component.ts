@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-welcomepage',
@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './welcomepage.component.html',
   styleUrl: './welcomepage.component.css'
 })
-export class WelcomepageComponent {
+export class WelcomepageComponent{
 
 }

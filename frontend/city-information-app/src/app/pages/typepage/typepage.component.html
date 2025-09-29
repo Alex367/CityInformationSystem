@@ -1,0 +1,107 @@
+<section class="section section_type">
+  <h1>Add type</h1>
+  <p class="section__description">Create your own type ✍️➕🧩</p>
+
+  <form
+    class="form form_type"
+    (ngSubmit)="
+      authService.isAdmin()
+        ? responseMode()
+          ? sendResponse()
+          : onSubmit()
+        : onCreateNewRequest()
+    "
+  >
+    <label for="typename">Type name: </label>
+    <input
+      type="text"
+      id="typename"
+      name="typename"
+      [(ngModel)]="enteredTypename"
+      required
+    />
+    <br />
+
+    <label for="typeAvatar" class="custom-file-upload">
+      {{ enteredTypeAvatar ? enteredTypeAvatar : "Choose Image" }}
+    </label>
+    <input
+      type="file"
+      id="typeAvatar"
+      name="typeAvatar"
+      (change)="onFileSelected($event)"
+      accept="image/*"
+      style="display: none"
+      required
+    />
+
+    <br />
+    <label for="description">Description: </label>
+    <textarea
+      name="description"
+      id="description"
+      [(ngModel)]="enteredDescription"
+      required
+    >
+    </textarea>
+    <br />
+    @if (!authService.isAdmin()) {
+    <label for="request">Request: </label>
+    <textarea
+      name="request"
+      id="request"
+      [(ngModel)]="enteredRequest"
+      required
+      maxlength="100"
+    >
+    </textarea>
+    } @if (authService.isAdmin() && responseMode()) {
+    <label for="request">Request: </label>
+    <textarea
+      name="request"
+      id="request"
+      [(ngModel)]="enteredRequest"
+      required
+      maxlength="100"
+      disabled
+    >
+    </textarea>
+    <label for="response">Response: </label>
+    <textarea
+      name="response"
+      id="response"
+      [(ngModel)]="enteredResponse"
+      required
+      maxlength="100"
+    >
+    </textarea>
+    <br />
+    @for (item of statusOptions; track $index) {
+    <label>
+      <input
+        type="radio"
+        name="choice"
+        [value]="item.value"
+        [(ngModel)]="enteredStatus"
+        required
+      />
+      {{ item.label }}
+    </label>
+    }
+    <p>Selected status: {{ enteredStatus }}</p>
+    }
+    <br />
+    <input
+      type="submit"
+      [value]="
+        authService.isAdmin()
+          ? isFilledParams()
+            ? 'Patch the type'
+            : responseMode()
+            ? 'Answer'
+            : 'Add new type'
+          : 'Send new request'
+      "
+    />
+  </form>
+</section>

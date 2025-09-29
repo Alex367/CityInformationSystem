@@ -1,0 +1,40 @@
+<section class="section section_userList">
+  <h1>User List</h1>
+  <form class="form form_login" (ngSubmit)="searchHandlerUser()" #loginForm="ngForm">
+    <label for="usernameList">Username:</label>
+    <input type="text" id="usernameList" name="usernameList" [(ngModel)]="username"/>
+    <input type="submit" value="Search" />
+    <input type="reset" value="Reset" (click)="onResetForm()"/>
+  </form>
+  @if (this.allUsersData()?.length === 0) {
+    <p>No users yet... 😭</p>
+  }
+  @else{
+    @if (isFetching()) {
+    <p>Loading users... ⏳</p>
+    }
+    @else if(this.searchData()?.length === 0){
+      <p>No users were found... 🙈</p>
+    }
+    @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Role</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of searchData(); track $index) {
+        <tr>
+          <td>{{ item.user_id }}</td>
+          <td>{{ item.role }}</td>
+          <td><button (click)="deleteUserHandler(item.id)">Delete</button></td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    }
+  }
+</section>

@@ -1,0 +1,31 @@
+<div class="section section_cityList">
+  <h1>All your types</h1>
+  <p class="section__description">The list of available types</p>
+
+  @if(isFetching() && !error()){
+  <p class="fallback-text">Fetching of types... ⏳</p>
+  } @if (error()) {
+  <p class="fallback-text">{{ error() }}</p>
+  } @if (typeData()) { @if (typeData()?.length === 0) {
+  <p>No cities created yet... 🥲</p>
+  } @else { @for (typeItem of typeData(); track $index){
+  <ul>
+    <li>
+      <p>{{ typeItem.type }} - {{ typeItem.description }}</p>
+      <div>
+        <img
+          [src]="typeItem.path_file"
+          [alt]="typeItem.path_file"
+          style="width: 300px; height: auto"
+        />
+      </div>
+      @if (authService.isAdmin()){
+      <div class="typeList_btn">
+        <button (click)="deleteHandler(typeItem.id)">Delete ❌</button>
+        <button (click)="editHandler(typeItem)">Edit ✍️</button>
+      </div>
+      }
+    </li>
+  </ul>
+  } } }
+</div>

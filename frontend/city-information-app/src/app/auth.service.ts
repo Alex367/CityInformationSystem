@@ -13,6 +13,7 @@ export class AuthService {
   public isLoggedIn = false;
   public roles = signal<string[]>([]);
   public isAdmin = signal<boolean>(false);
+  public loggedName = signal<string>('');
 
   constructor(private http: HttpClient) {}
 
@@ -27,8 +28,8 @@ export class AuthService {
 
   setUserInfo(user: UserInfoResponse) {
     this.isLoggedIn = true;
-    this.roles.set(user.roles.map(r => r.authority)); // ["ROLE_EMPLOYEE"]
-
+    this.roles.set(user.roles.map((r) => r.authority)); // ["ROLE_EMPLOYEE"]
+    this.loggedName.set(user.username);
     this.setAdminFlag();
   }
 
@@ -37,9 +38,8 @@ export class AuthService {
   }
 
   public setAdminFlag() {
-    if(this.roles().includes('ROLE_ADMIN')){
+    if (this.roles().includes('ROLE_ADMIN')) {
       this.isAdmin.set(true);
-    };
+    }
   }
-
 }

@@ -30,6 +30,7 @@ export class HeaderComponent implements OnInit {
           this.authService.isAdmin.set(false);
           this.authService.roles.set([]);
           this.router.navigate(['/']);
+          this.authService.loggedName.set("");
         },
         error: (err) => {
           // console.log("Logout error")

@@ -21,7 +21,40 @@ export class CityListComponent implements OnInit {
 
   constructor(private router: Router) {}
 
+  ngOnInit() {
+    this.isFetching.set(true);
+    const subscription = this.httpClient
+      .get<{ cities: City[] }>('http://localhost:8080/api/cityList', {
+        withCredentials: true,
+      })
+      .pipe(
+        delay(300),
+        map((response) => response.cities),
+        catchError((error) => {
+          console.log(error);
+          return throwError(() => new Error('Something went wrong'));
+        })
+      )
+      .subscribe({
+        next: (cityResponse) => {
+          console.log(cityResponse);
+          this.cityData.set(cityResponse);
+        },
+        error: (error) => {
+          this.error.set(error.message);
+        },
+        complete: () => {
+          this.isFetching.set(false);
+        },
+      });
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
+  }
+
   deleteHandler(cityId: string) {
+    console.log("ccc " + cityId);
     const sub = this.httpClient
       .delete<{ city: string }>(
         `http://localhost:8080/api/cityList/${cityId}`,
@@ -50,38 +83,6 @@ export class CityListComponent implements OnInit {
         city: cityItem.city,
         description: cityItem.description,
       },
-    });
-  }
-
-  ngOnInit() {
-    this.isFetching.set(true);
-    const subscription = this.httpClient
-      .get<{ cities: City[] }>('http://localhost:8080/api/cityList', {
-        withCredentials: true,
-      })
-      .pipe(
-        delay(1000),
-        map((response) => response.cities),
-        catchError((error) => {
-          console.log(error);
-          return throwError(() => new Error('Something went wrong'));
-        })
-      )
-      .subscribe({
-        next: (cityResponse) => {
-          console.log(cityResponse);
-          this.cityData.set(cityResponse);
-        },
-        error: (error) => {
-          this.error.set(error.message);
-        },
-        complete: () => {
-          this.isFetching.set(false);
-        },
-      });
-
-    this.destroyRef.onDestroy(() => {
-      subscription.unsubscribe();
     });
   }
 }

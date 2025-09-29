@@ -1,11 +1,19 @@
 package com.smartcity.smart_city_information_system.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Setter
+@Getter
+@ToString
 @Entity
 @Table(name = "city")
 public class City {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -17,6 +25,13 @@ public class City {
     @Column(name = "description")
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Members members;
+
+    @OneToMany(mappedBy = "theCity", cascade = CascadeType.ALL)
+    private List<Place> places;
+
     public City() {
     }
 
@@ -26,45 +41,13 @@ public class City {
         this.description = description;
     }
 
-    public int getId() {
-        return id;
+    public void add(Place tempPlace){
+        if(places == null){
+            places = new ArrayList<>();
+        }
+        places.add(tempPlace);
+
+        tempPlace.setTheCity(this);
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getPath_file() {
-        return path_file;
-    }
-
-    public void setPath_file(String path_file) {
-        this.path_file = path_file;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public String toString() {
-        return "City{" +
-                "id=" + id +
-                ", city='" + city + '\'' +
-                ", path_file='" + path_file + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
 }

@@ -1,0 +1,31 @@
+<div class="section section_cityList">
+  <h1>All your cities</h1>
+  <p class="section__description">The list of your places</p>
+
+  @if(isFetching() && !error()){
+  <p class="fallback-text">Fetching places... ⏳</p>
+  } @if (error()) {
+  <p class="fallback-text">{{ error() }}</p>
+  } @if (placeData()) { @if (placeData()?.length === 0) {
+  <p>No places created yet... 🥲</p>
+  } @else { @for (placeItem of placeData(); track $index){
+  <ul>
+    <li>
+      <p>{{ placeItem.place }} - 
+        {{ placeItem.description }} - 
+        {{placeItem.city}} - 
+        {{placeItem.type}}</p>
+      <div>
+        <img
+          [src]="placeItem.path_file"
+          [alt]="placeItem.path_file"
+          style="width: 300px; height: auto"
+        />
+      </div>
+      <div class="cityList_btn">
+        <button (click)="deleteHandler(placeItem.id)">Delete ❌</button>
+      </div>
+    </li>
+  </ul>
+  } } }
+</div>

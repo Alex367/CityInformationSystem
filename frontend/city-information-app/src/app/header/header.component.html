@@ -8,7 +8,7 @@
           routerLink="/login"
           routerLinkActive="activebutton"
           ariaCurrentWhenActive="page"
-          >Login</a
+          >Login 🤟</a
         >
       </li>
       <li>
@@ -17,7 +17,7 @@
           routerLinkActive="activebutton"
           ariaCurrentWhenActive="page"
         >
-          Registration
+          Registration 👍
         </a>
       </li>
       } @else { @if (authService.isAdmin()) {
@@ -26,11 +26,10 @@
           routerLink="/userList"
           routerLinkActive="activebutton"
           ariaCurrentWhenActive="page"
-          >UserList</a
+          >User List 👨‍🎓</a
         >
       </li>
       }
-
       <li>
         <a
           routerLink="/welcome"
@@ -55,12 +54,60 @@
           routerLinkActive="activebutton"
           ariaCurrentWhenActive="page"
         >
-          City list
+          City list 📝
         </a>
+      </li>
+      <li>
+        <a
+          routerLink="/type"
+          routerLinkActive="activebutton"
+          ariaCurrentWhenActive="page"
+        >
+          Type
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/typeList"
+          routerLinkActive="activebutton"
+          ariaCurrentWhenActive="page"
+        >
+          Type List 📝
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/place"
+          routerLinkActive="activebutton"
+          ariaCurrentWhenActive="page"
+        >
+          Place
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/placeList"
+          routerLinkActive="activebutton"
+          ariaCurrentWhenActive="page"
+        >
+          Place List 📝
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/requestList"
+          routerLinkActive="activebutton"
+          ariaCurrentWhenActive="page"
+          >Request List ✅</a
+        >
       </li>
 
       <li>
         <button (click)="logoutHandler()">Logout</button>
+      </li>
+
+      <li>
+        <strong>Logged as: {{ authService.loggedName() }} 🙈😎🤪</strong>
       </li>
 
       }

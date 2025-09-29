@@ -1,9 +1,3 @@
-.section_cityList{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.6rem;
-}
 .cityList_btn{
     display: flex;
     justify-content:space-around;

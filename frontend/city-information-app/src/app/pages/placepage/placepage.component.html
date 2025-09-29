@@ -1,0 +1,59 @@
+<section class="section section_place">
+  <h1>Add place</h1>
+  <p class="section__description">Add a new place to your list</p>
+
+  @if (isFetching()) {
+  <p class="fallback-text">Fetching data... ⏳</p>
+  } @else {
+  <form class="form form_place" (ngSubmit)="onSubmit()">
+    <label for="city">Select city: </label>
+    <select name="city" id="city" [(ngModel)]="enteredSelectedCity">
+      <option value="">--Please choose an option--</option>
+      @for (item of cityData(); track $index) {
+      <option value="{{ item.city }}">{{ item.city }}</option>
+      }
+    </select>
+    <br />
+    <label for="type">Select type: </label>
+    <select name="type" id="type" [(ngModel)]="enteredSelectedType">
+      <option value="">--Please choose an option--</option>
+      @for (item of typeData(); track $index) {
+      <option value="{{ item.type }}">{{ item.type }}</option>
+      }
+    </select>
+    <br />
+    <label for="placeName">Place name: </label>
+    <input
+      type="text"
+      id="placeName"
+      name="placeName"
+      [(ngModel)]="enteredPlacename"
+      required
+    />
+    <br />
+    <label for="placeAvatar">Upload image: </label>
+    <input
+      type="file"
+      id="placeAvatar"
+      name="placeAvatar"
+      [(ngModel)]="enteredPlaceAvatar"
+      required
+    />
+    <br />
+    <label for="placeDescription">Description: </label>
+    <textarea
+      name="placeDescription"
+      id="placeDescription"
+      [(ngModel)]="enteredPlaceDescription"
+      required
+    >
+    </textarea>
+    <br />
+    <input
+      type="submit"
+      [value]="isFilledParams() ? 'Patch the place' : 'Add new place'"
+    />
+  </form>
+
+  }
+</section>

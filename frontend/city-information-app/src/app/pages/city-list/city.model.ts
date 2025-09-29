@@ -1,5 +1,5 @@
 export interface City {
-  id: string;
+  id: string,
   city: string;
   path_file: string;
   description: string;
